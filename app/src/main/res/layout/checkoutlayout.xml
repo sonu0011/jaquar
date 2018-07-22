@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:background="@drawable/card">
+
+    <RelativeLayout
+
+        android:layout_width="match_parent"
+
+        android:layout_height="match_parent"
+        android:layout_margin="5dp">
+
+        <ImageView
+            android:id="@+id/checkoutImage"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_margin="5dp"
+            android:src="@drawable/back1" />
+
+        <TextView
+            android:id="@+id/checkoutTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/checkoutImage"
+            android:layout_marginLeft="3dp"
+            android:layout_toRightOf="@+id/checkoutImage"
+            android:text="Title comes here"
+            android:textColor="#000"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/checkoutRsSymbol"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/checkoutTitle"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@+id/checkoutImage"
+            android:text="@string/Rs"
+            android:textColor="#e41919"
+
+            android:textSize="25sp" />
+
+        <TextView
+            android:id="@+id/checkoutRsValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/checkoutRsSymbol"
+            android:layout_marginBottom="1dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginTop="3dp"
+            android:layout_toRightOf="@+id/checkoutRsSymbol"
+            android:text="1200"
+            android:textColor="#e41919"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/increaseItem"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_below="@+id/checkoutImage"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/circlebtn"
+            android:text="+"
+            android:textColor="#000000"
+            android:textSize="20dp" />
+
+        <TextView
+            android:id="@+id/increaseItemTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/increaseItem"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="8dp"
+            android:layout_toRightOf="@+id/increaseItem"
+            android:text="1"
+            android:textColor="#e41919"
+            android:textSize="23dp" />
+
+        <Button
+            android:id="@+id/decreaseItem"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_below="@+id/checkoutImage"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="8dp"
+            android:layout_toRightOf="@+id/increaseItemTextView"
+            android:background="@drawable/circlebtn"
+            android:text="-"
+            android:textColor="#000000"
+            android:textSize="20dp" />
+
+        <Button
+            android:background="@drawable/deletebtn"
+            android:id="@+id/checkoutDeleteButton"
+            android:layout_marginTop="84dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_toRightOf="@+id/decreaseItem"
+            android:text="Delete"
+            android:textAllCaps="false"
+            android:textColor="#fd05fd" />
+
+        <TextView
+            android:id="@+id/checkoutProductcode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/checkoutRsValue"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="3dp"
+            android:layout_toRightOf="@+id/checkoutRsValue"
+            android:text="Product code" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

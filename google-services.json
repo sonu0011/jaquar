@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1090843664021",
+    "firebase_url": "https://jaquarapp.firebaseio.com",
+    "project_id": "jaquarapp",
+    "storage_bucket": "jaquarapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1090843664021:android:fff69e538f1922d2",
+        "android_client_info": {
+          "package_name": "com.example.sonu.jaquar"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1090843664021-qsd5rsudmhsb76hv11l9cemqoko26ul5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.sonu.jaquar",
+            "certificate_hash": "a6f9aaca80aaf9210e29a514e00289f21f13f259"
+          }
+        },
+        {
+          "client_id": "1090843664021-436bvftj12hnoj96ins9ea0opb9pj8up.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBwjrMCvm8hVTTU67qpaI_bkEhAx05Prp0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1090843664021-436bvftj12hnoj96ins9ea0opb9pj8up.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

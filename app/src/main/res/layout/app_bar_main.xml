@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="true" android:focusableInTouchMode="true"
+    tools:context="com.example.sonu.jaquar.HomeActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/AppBarLayout"
+        >
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            app:titleTextColor="#fff"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Jaquor.com"
+                android:textSize="25sp"
+                android:textColor="#fff"
+                android:textStyle="bold"
+                android:fontFamily="serif"/>
+            <TextView
+                android:layout_marginTop="3dp"
+                android:paddingTop="2dp"
+                android:layout_centerHorizontal="true"
+                android:textAlignment="center"
+                android:background="@drawable/ic_shopping_cart_black_24dp"
+                android:id="@+id/cartValueHome"
+                android:textColor="#2bd725"
+                android:textSize="15sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="9dp"
+                android:textStyle="bold"
+                android:text="0"
+                android:layout_marginLeft="90dp"
+              />
+
+        </android.support.v7.widget.Toolbar>
+
+     <RelativeLayout
+
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:orientation="horizontal">
+         <Button
+             android:id="@+id/searchByCategotyBtn"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:textAllCaps="false"
+             android:layout_marginBottom="2dp"
+             android:text="  Shop by \n category"/>
+
+       <Button
+
+           android:textColor="#a4000000"
+           android:id="@+id/searchAnyThing"
+           android:drawableLeft="@drawable/ic_search_black_24dp"
+           android:layout_marginLeft="1dp"
+           android:layout_marginTop="2dp"
+           android:padding="8dp"
+
+          android:layout_toRightOf="@+id/searchByCategotyBtn"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:hint="Search what you want.."
+           android:textColorHint="#59b13f"
+           android:background="#b4ffffff"
+           android:layout_toEndOf="@+id/searchByCategotyBtn" />
+     </RelativeLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <include layout="@layout/content_main" />
+
+
+</RelativeLayout>

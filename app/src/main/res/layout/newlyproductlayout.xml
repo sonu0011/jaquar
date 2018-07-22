@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardPreventCornerOverlap="true"
+    app:cardCornerRadius="5dp"
+
+    app:cardElevation="20dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <RelativeLayout
+       android:layout_marginTop="2dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_margin="10dp"
+            android:id="@+id/newlyImageview"
+            android:src="@drawable/image1"/>
+        <TextView
+           android:fontFamily="sans-serif"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/newlyImageview"
+            android:layout_alignTop="@+id/newlyImageview"
+            android:text="Title Comes Here"
+            android:textSize="20sp"
+            android:textColor="#52609f"
+            android:id="@+id/newlytitel"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/newlytitel"
+            android:layout_toRightOf="@+id/newlyImageview"
+            android:text="@string/Rs"
+            android:layout_marginTop="2dp"
+            android:fontFamily="serif"
+            android:textColor="#e0000000"
+            android:id="@+id/newlypriceSymnol"
+            android:textSize="20dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/newlypriceSymnol"
+            android:layout_alignTop="@+id/newlypriceSymnol"
+            android:text="1200"
+            android:fontFamily="serif"
+            android:id="@+id/newlyProductPrice"
+            android:textColor="#000"
+            android:textSize="20sp"
+            android:layout_marginLeft="1dp"/>
+        <TextView
+          android:fontFamily="monospace"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/newlypriceSymnol"
+            android:text="Product Code"
+            android:id="@+id/newlyProductCode"
+            android:layout_toRightOf="@+id/newlyImageview"
+            android:layout_marginTop="5dp"
+            android:textSize="20sp"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:id="@+id/newlyviewmoreimage"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/ic_arrow_forward_black_24dp"
+            android:layout_toRightOf="@+id/newlyViewMore"
+            android:layout_alignTop="@+id/newlyViewMore"/>
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/newlyProductCode"
+    android:layout_toRightOf="@+id/newlyImageview"
+    android:text="View More"
+    android:textSize="19dp"
+    android:textStyle="bold"
+    android:id="@+id/newlyViewMore"
+    android:layout_marginTop="3dp"/>
+    </RelativeLayout>
+<View
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:layout_marginTop="185dp"
+    android:background="#6e000000"
+    />
+</android.support.v7.widget.CardView>

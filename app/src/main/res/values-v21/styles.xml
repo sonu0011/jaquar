@@ -1,0 +1,7 @@
+<resources>
+    <style name="customCardView" parent="CardView.Light">
+        <item name="cardBackgroundColor">#fff</item>
+        <item name="android:background">#fff</item>
+
+    </style>
+</resources>

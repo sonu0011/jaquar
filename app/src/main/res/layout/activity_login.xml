@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/relativeLayout"
+    android:background="@drawable/blurypic"
+    android:padding="8dp"
+
+    tools:context="com.example.sonu.jaquar.LoginActivity">
+
+    <EditText
+        android:layout_marginTop="210dp"
+        android:textColor="#000"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/login_username"
+        android:inputType="text"
+        android:padding="14dp"
+        android:background="@drawable/login_user_password_design"
+        android:textColorHint="#000"
+
+        android:id="@+id/login_username"/>
+    <EditText
+        android:textColor="#000"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/login_username"
+        android:id="@+id/login_password"
+
+        android:background="@drawable/login_user_password_design"
+        android:padding="14dp"
+        android:inputType="textPassword"
+        android:textColorHint="#000"
+        android:hint="@string/login_password"
+        android:maxLength="20"
+        android:layout_marginTop="8dp"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/login_password"
+        android:text="@string/logn_btn"
+        android:textColor="#fff"
+        android:textSize="15sp"
+        android:padding="15dp"
+        android:fontFamily="serif"
+        android:textAllCaps="false"
+        android:layout_marginTop="52dp"
+        android:id="@+id/login_btn"
+        tools:targetApi="jelly_bean"
+        android:background="@drawable/login_btn"/>
+
+
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/cordinateLayout"
+        android:layout_alignParentBottom="true"/>
+
+    <TextView
+        android:id="@+id/passwordImage"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_above="@+id/login_btn"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/ic_visibility_off_black_24dp" />
+
+</RelativeLayout>

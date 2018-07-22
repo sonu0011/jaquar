@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">Jaquar</string>
+    <string name="login_username">Username...</string>
+    <string name="login_password">Password...</string>
+    <string name="logn_btn">Login</string>
+    <string name="remember_me">Remember Me</string>
+    <string name="jaquor">Jaquor</string>
+    <string name="search_by_category">Search By Category</string>
+    <string name="search_by_product">Search By Product</string>
+    <string name="title_activity_main">Jaquar</string>
+    <string name="Rs">\u20B9</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string-array name="spinnerValue">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+    <string name="title_activity_home_search">HomeSearch</string>
+</resources>
