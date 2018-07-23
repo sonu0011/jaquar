@@ -116,6 +116,9 @@ ProgressDialog progressDialog;
 
                             .build();
                     notificationManagerCompat.notify(2, notification);
+                    databaseReference.removeValue();
+                    startActivity(new Intent(CheckoutActivity.this,HomeActivity.class));
+                    finish();
                 }
                 Toast.makeText(CheckoutActivity.this, "Thanks for using this app", Toast.LENGTH_SHORT).show();
 

@@ -55,7 +55,7 @@ ProgressDialog progressDialog;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sub_category);
         toolbar =findViewById(R.id.toolbarSubCategory);
-        toolbar.setTitle("Jaquor.com");
+        toolbar.setTitle("Jaquar.com");
         toolbar.setTitleTextColor(Color.WHITE);
         toolbar.setBackgroundColor(getResources().getColor(R.color.toobarCOlor));
         setSupportActionBar(toolbar);getSupportActionBar().setDisplayShowTitleEnabled(true);

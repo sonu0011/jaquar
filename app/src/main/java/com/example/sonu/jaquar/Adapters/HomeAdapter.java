@@ -62,7 +62,7 @@ Context context;
         {
             HomeDataModel data = homeDataModels.get(position);
             Glide.with(context).load(data.getImage()).placeholder(R.drawable.loader).dontAnimate().into(((NewProductViewHolder) holder).productImage);
-            ((NewProductViewHolder) holder).productcode.setText(data.getTitle());
+            ((NewProductViewHolder) holder).productcode.setText(data.getProductcode());
             ((NewProductViewHolder) holder).productprice.setText(data.getPrice());
             ((NewProductViewHolder) holder).producttitle.setText(data.getTitle());
             ((NewProductViewHolder) holder).getData(position);

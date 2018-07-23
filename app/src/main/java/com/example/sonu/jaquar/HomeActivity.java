@@ -126,7 +126,7 @@ SliderAdapter sliderAdapter;
          public void onClick(View view) {
 
             startActivity(new Intent(HomeActivity.this,HomeSearch.class));
-             overridePendingTransition(R.anim.right_in,R.anim.left_out);
+//             overridePendingTransition(R.anim.right_in,R.anim.left_out);
 
          }
      });
@@ -207,7 +207,7 @@ cartValue.setOnClickListener(new View.OnClickListener() {
                 //Toast.makeText(HomeActivity.this, "button clicked", Toast.LENGTH_SHORT).show();
                 Intent intent =new Intent(HomeActivity.this,ShowByCategoty.class);
                 startActivity(intent);
-                overridePendingTransition(R.anim.right_in,R.anim.left_out);
+//                overridePendingTransition(R.anim.right_in,R.anim.left_out);
 
             }
         });
@@ -357,7 +357,7 @@ cartValue.setOnClickListener(new View.OnClickListener() {
             Intent intent =new Intent(Intent.ACTION_SEND);
             intent.setType("text/plain");
             intent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Jaquar App");
-            intent.putExtra(android.content.Intent.EXTRA_TEXT, "Hey there! I’m using JaquarApp");
+            intent.putExtra(android.content.Intent.EXTRA_TEXT, "https://play.google.com/store/apps/details?id=com.agbe.jaquar");
             startActivity(Intent.createChooser(intent,"Share Via"));
 
 

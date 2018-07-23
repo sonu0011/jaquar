@@ -76,32 +76,32 @@ public class LoginActivity extends AppCompatActivity {
 //            startActivity(new Intent(LoginActivity.this,HomeActivity.class));
 //            finish();
 //        }
-        passwordImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(!loginPassword.getText().toString().trim().isEmpty())
-                {
-                    String pass = loginPassword.getText().toString().trim();
-                    if(!pass.isEmpty())
-                    {
-                        if(i==1)
-                        {
-                            i=0;
-                            loginPassword.setTransformationMethod(null);
-                            loginPassword.setSelection(loginPassword.getText().length());
-                            passwordImage.setBackgroundResource(R.drawable.ic_visibility_black_24dp);
-                        }
-                        else{
-                            i=1;
-                            loginPassword.setTransformationMethod(new PasswordTransformationMethod());
-                            loginPassword.setSelection(loginPassword.getText().length());
-                            passwordImage.setBackgroundResource(R.drawable.ic_visibility_off_black_24dp);
-                        }
-                    }
-
-                }
-            }
-        });
+//        passwordImage.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if(!loginPassword.getText().toString().trim().isEmpty())
+//                {
+//                    String pass = loginPassword.getText().toString().trim();
+//                    if(!pass.isEmpty())
+//                    {
+//                        if(i==1)
+//                        {
+//                            i=0;
+//                            loginPassword.setTransformationMethod(null);
+//                            loginPassword.setSelection(loginPassword.getText().length());
+//                            passwordImage.setBackgroundResource(R.drawable.ic_visibility_black_24dp);
+//                        }
+//                        else{
+//                            i=1;
+//                            loginPassword.setTransformationMethod(new PasswordTransformationMethod());
+//                            loginPassword.setSelection(loginPassword.getText().length());
+//                            passwordImage.setBackgroundResource(R.drawable.ic_visibility_off_black_24dp);
+//                        }
+//                    }
+//
+//                }
+//            }
+//        });
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -126,7 +126,7 @@ public class LoginActivity extends AppCompatActivity {
                                     Log.d("LoginActivity", "successfull");
                                     progress.dismiss();
                                     startActivity(new Intent(LoginActivity.this,HomeActivity.class));
-                                    overridePendingTransition(R.anim.right_in,R.anim.left_out);
+//                                    overridePendingTransition(R.anim.right_in,R.anim.left_out);
 
                                     finish();
                                     //Snackbar.make(coordinatorLayout, "Login Successsfull", Snackbar.LENGTH_SHORT).show();
@@ -185,7 +185,7 @@ public class LoginActivity extends AppCompatActivity {
         loginUsername = findViewById(R.id.login_username);
         loginPassword = findViewById(R.id.login_password);
         loginButton = findViewById(R.id.login_btn);
-        relativeLayout = findViewById(R.id.relativeLayout);
+       // relativeLayout = findViewById(R.id.relativeLayout);
         firebaseAuth = FirebaseAuth.getInstance();
         Log.d("FirebaseInstance", firebaseAuth.toString());
         progress = new ProgressDialog(LoginActivity.this);
@@ -193,7 +193,7 @@ public class LoginActivity extends AppCompatActivity {
         firebaseUser = firebaseAuth.getCurrentUser();
         connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
         networkInfo = connectivityManager.getActiveNetworkInfo();
-        passwordImage = findViewById(R.id.passwordImage);
+        //passwordImage = findViewById(R.id.passwordImage);
         if (FirebaseAuth.getInstance().getCurrentUser()!=null) {
             startActivity(new Intent(LoginActivity.this, HomeActivity.class));
             finish();

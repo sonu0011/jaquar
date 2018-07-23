@@ -14,8 +14,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Title Comes Here"
-        android:textSize="20sp"
-        android:fontFamily="sans-serif"
+        android:textSize="17sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/custom_font"
         android:id="@+id/singleProductTitle"
         android:layout_marginTop="13dp"
         android:textColor="#b0667fb6"
@@ -29,33 +30,36 @@
         android:layout_toRightOf="@+id/singleProductImage"
         android:text="@string/Rs"
         android:layout_marginTop="2dp"
-        android:fontFamily="serif"
+        android:fontFamily="@font/custom_font_dark"
         android:textColor="#e0000000"
         android:id="@+id/singleProductPriceSymbol"
-        android:textSize="20dp"/>
+        android:textSize="16dp"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/singleProductPriceSymbol"
         android:layout_alignTop="@+id/singleProductPriceSymbol"
         android:text="1200"
-        android:fontFamily="serif"
+        android:fontFamily="@font/custom_font_dark"
         android:id="@+id/singleProductPrice"
         android:textColor="#000"
-        android:textSize="20sp"
+        android:textSize="16sp"
         android:layout_marginLeft="3dp"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Product code"
+        android:fontFamily="@font/custom_font"
+
         android:textColor="#ab000000"
         android:id="@+id/singleProductProductcode"
         android:layout_toRightOf="@+id/singleProductImage"
         android:layout_below="@+id/singleProductPrice"
-        android:textSize="18dp"
+        android:textSize="16dp"
         android:layout_marginTop="8dp"
         android:layout_toEndOf="@+id/singleProductImage" />
     <TextView
+        android:fontFamily="@font/custom_font_dark"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/singleProductProductcode"
@@ -65,7 +69,8 @@
         android:textColor="#000"
         android:id="@+id/singleProductViewMore"
         android:layout_marginLeft="2dp"
-        android:textSize="20dp"/>
+        android:textSize="16dp"
+        />
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -73,6 +78,6 @@
         android:layout_toRightOf="@+id/singleProductViewMore"
         android:layout_alignTop="@+id/singleProductViewMore"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="3dp"/>
+        />
 
 </RelativeLayout>

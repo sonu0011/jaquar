@@ -3,127 +3,148 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <android.support.v7.widget.Toolbar
+        android:id="@+id/buyProductToolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/buyProductToolbar"/>
+        android:layout_height="wrap_content" />
+
     <ImageView
-        android:background="@drawable/rectangleshape"
-    android:layout_width="350dp"
-    android:layout_marginTop="15dp"
-    android:layout_height="200dp"
-    android:scaleType="fitXY"
+        android:id="@+id/buyProductImage"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
         android:layout_below="@+id/buyProductToolbar"
-    android:layout_centerHorizontal="true"
-    android:src="@drawable/back1"
-    android:id="@+id/buyProductImage"/>
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/rectangleshape"
+        android:scaleType="fitXY"
+        android:src="@drawable/back1" />
+
     <TextView
+        android:fontFamily="@font/custom_font_dark"
+        android:id="@+id/buyProductTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/buyProductImage"
-        android:text="Titel Comes Here"
-        android:textSize="20dp"
         android:layout_marginLeft="17dp"
         android:layout_marginTop="5dp"
-        android:id="@+id/buyProductTitle"
-        android:textColor="#73201dca"/>
+        android:text="Titel Comes Here"
+        android:textColor="#73201dca"
+        android:textStyle="bold"
+        android:textSize="17dp" />
+
     <TextView
+        android:id="@+id/buyProductCodetitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/buyProductTitle"
-        android:text="Product Code :"
-        android:textSize="20dp"
-        android:textStyle="bold"
-        android:id="@+id/buyProductCodetitle"
+        android:layout_marginLeft="17dp"
         android:layout_marginTop="5dp"
-        android:layout_marginLeft="17dp"/>
+        android:text="Product Code :"
+        android:textSize="16dp"
+        android:fontFamily="@font/custom_font_dark"
+        android:textStyle="bold" />
+
     <TextView
+        android:id="@+id/buyProductGetProductCode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/buyProductCodetitle"
         android:layout_alignTop="@+id/buyProductCodetitle"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@+id/buyProductCodetitle"
         android:text="Po45ET#!23"
-        android:id="@+id/buyProductGetProductCode"
-        android:textSize="19dp"
         android:textColor="#f0000000"
-        android:layout_marginLeft="10dp"/>
+        android:fontFamily="@font/custom_font"
+        android:textSize="16dp" />
+
     <TextView
+        android:id="@+id/buyProductPriceTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/buyProductCodetitle"
         android:layout_marginLeft="17dp"
         android:layout_marginTop="5dp"
         android:text="Price :"
-        android:textSize="20dp"
-        android:textStyle="bold"
-        android:id="@+id/buyProductPriceTitle"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/Rs"
-            android:layout_toRightOf="@+id/buyProductPriceTitle"
-            android:layout_alignTop="@+id/buyProductPriceTitle"
-            android:textSize="20sp"
-            android:textColor="#000"
-            android:layout_marginLeft="5dp"
-            android:fontFamily="serif"/>
+        android:textSize="16dp"
+        android:fontFamily="@font/custom_font"
+        android:textStyle="bold" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/buyProductPriceTitle"
+        android:layout_marginLeft="5dp"
         android:layout_toRightOf="@+id/buyProductPriceTitle"
-        android:text="1500"
-        android:fontFamily="serif"
-        android:id="@+id/buyProductGetProductPrice"
-        android:layout_marginLeft="17dp"
+        android:fontFamily="@font/custom_font"
+        android:text="@string/Rs"
         android:textColor="#000"
-        android:textSize="20sp"/>
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/buyProductGetProductPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/buyProductPriceTitle"
+        android:layout_marginLeft="17dp"
+        android:layout_toRightOf="@+id/buyProductPriceTitle"
+        android:fontFamily="@font/custom_font"
+        android:text="1500"
+
+        android:textColor="#000"
+        android:textSize="16sp" />
+
     <Button
-        android:layout_marginTop="30dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:id="@+id/buyProductAddtocartBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/buyProductPriceTitle"
-        android:background="@drawable/addtocartbtn"
-        android:text="ADD TO CART"
-        android:padding="15dp"
-        android:id="@+id/buyProductAddtocartBtn"
-        android:textColor="#fff"/>
-    android:textSize="20sp"/>
-    <Button
-        android:padding="15dp"
-        android:layout_marginTop="30dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
+        android:layout_marginTop="30dp"
+        android:padding="25dp"
+        android:textStyle="bold"
+        android:fontFamily="@font/custom_font"
+        android:text="ADD TO CART"
+        android:textColor="#fff" />
+
+
+    <Button
+        android:id="@+id/buyProductBuyNowBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/buyProductAddtocartBtn"
-        android:background="@drawable/buynow"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="30dp"
+       style="@style/Widget.AppCompat.Button.Colored"
+        android:padding="25dp"
         android:text="Buy Now"
-        android:id="@+id/buyProductBuyNowBtn"
-        android:textColor="#fff"/>
+        android:textStyle="bold"
+        android:fontFamily="@font/custom_font"
+        android:textColor="#fff" />
 
 
     <TextView
-        android:paddingTop="2dp"
-        android:layout_alignParentRight="true"
-        android:layout_centerHorizontal="true"
-        android:textAlignment="center"
-        android:background="@drawable/ic_shopping_cart_black_24dp"
         android:id="@+id/cartValue"
-        android:textColor="#2bd725"
-        android:textSize="15dp"
-        android:layout_marginLeft="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/buyProductImage"
         android:layout_alignEnd="@+id/buyProductImage"
+        android:layout_alignParentRight="true"
         android:layout_alignRight="@+id/buyProductImage"
+        android:layout_centerHorizontal="true"
         android:layout_marginBottom="9dp"
-        android:textStyle="bold"
-        android:text="0"
+        android:layout_marginLeft="5dp"
         android:layout_marginRight="17dp"
+        android:background="@drawable/ic_shopping_cart_black_24dp"
+        android:paddingTop="2dp"
+        android:text="0"
+        android:fontFamily="@font/custom_font"
+        android:textAlignment="center"
+        android:textColor="#2bd725"
+        android:textSize="16dp"
+        android:textStyle="bold"
 
         />
 

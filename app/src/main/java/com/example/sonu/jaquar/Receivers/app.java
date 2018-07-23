@@ -40,7 +40,7 @@ public class app extends Application {
                 PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 101, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                 AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
                 if (alarmManager != null) {
-                    alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 30*60*1000, AlarmManager.INTERVAL_HALF_HOUR, pendingIntent);
+                    alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 60*1000, AlarmManager.INTERVAL_HALF_HOUR, pendingIntent);
 
                 }
             }

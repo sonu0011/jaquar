@@ -14,8 +14,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Title Comes Here"
-        android:textSize="25sp"
-        android:fontFamily="sans-serif"
+        android:textSize="17sp"
+        android:fontFamily="@font/custom_font"
+        android:textStyle="bold"
         android:id="@+id/subcategoryTitle"
         android:layout_marginTop="13dp"
         android:textColor="#b0667fb6"
@@ -29,9 +30,10 @@
     android:text="View More"
     android:layout_marginTop="10dp"
     android:textColor="#000"
+    android:fontFamily="@font/custom_font"
     android:id="@+id/subcategoryViewMore"
     android:layout_marginLeft="2dp"
-    android:textSize="20dp"/>
+    android:textSize="16dp"/>
 <ImageView
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -39,5 +41,5 @@
     android:layout_toRightOf="@+id/subcategoryViewMore"
     android:layout_alignTop="@+id/subcategoryViewMore"
     android:layout_marginLeft="10dp"
-    android:layout_marginTop="3dp"/>
+   />
 </RelativeLayout>

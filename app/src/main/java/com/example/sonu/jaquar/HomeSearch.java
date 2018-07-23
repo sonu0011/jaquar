@@ -56,7 +56,8 @@ public class HomeSearch extends AppCompatActivity {
         searchrecycleview.setHasFixedSize(true);
         searchrecycleview.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarHomeSearch);
-        toolbar.setTitle("Jaquor.com");
+        toolbar.setTitle("jaquar.com");
+
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);

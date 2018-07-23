@@ -18,13 +18,14 @@
             android:id="@+id/newlyImageview"
             android:src="@drawable/image1"/>
         <TextView
-           android:fontFamily="sans-serif"
+           android:fontFamily="@font/dark"
+            android:textStyle="bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/newlyImageview"
             android:layout_alignTop="@+id/newlyImageview"
             android:text="Title Comes Here"
-            android:textSize="20sp"
+            android:textSize="17sp"
             android:textColor="#52609f"
             android:id="@+id/newlytitel"
             />
@@ -35,31 +36,32 @@
             android:layout_toRightOf="@+id/newlyImageview"
             android:text="@string/Rs"
             android:layout_marginTop="2dp"
-            android:fontFamily="serif"
+            android:fontFamily="@font/custom_font_dark"
             android:textColor="#e0000000"
             android:id="@+id/newlypriceSymnol"
-            android:textSize="20dp"/>
+            android:textSize="16dp"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/newlypriceSymnol"
             android:layout_alignTop="@+id/newlypriceSymnol"
             android:text="1200"
-            android:fontFamily="serif"
+            android:fontFamily="@font/custom_font"
             android:id="@+id/newlyProductPrice"
             android:textColor="#000"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:layout_marginLeft="1dp"/>
         <TextView
-          android:fontFamily="monospace"
+          android:fontFamily="@font/custom_font"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/newlypriceSymnol"
             android:text="Product Code"
+            android:textStyle="bold"
             android:id="@+id/newlyProductCode"
             android:layout_toRightOf="@+id/newlyImageview"
             android:layout_marginTop="5dp"
-            android:textSize="20sp"/>
+            android:textSize="16sp"/>
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -75,7 +77,8 @@
     android:layout_below="@+id/newlyProductCode"
     android:layout_toRightOf="@+id/newlyImageview"
     android:text="View More"
-    android:textSize="19dp"
+    android:textSize="16dp"
+    android:fontFamily="@font/custom_font"
     android:textStyle="bold"
     android:id="@+id/newlyViewMore"
     android:layout_marginTop="3dp"/>

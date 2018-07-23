@@ -61,7 +61,7 @@ ProgressDialog progressDialog;
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         list =new ArrayList<>();
         toolbar =findViewById(R.id.productsToolbar);
-        toolbar.setTitle("Jaquor.com");
+        toolbar.setTitle("Jaquar.com");
         toolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(true);

@@ -51,7 +51,7 @@ public class ShowByCategoty extends AppCompatActivity  {
         recyclerView = findViewById(R.id.recyclerview);
         recyclerView.setHasFixedSize(true);
         toolbar =findViewById(R.id.toolbarCategory);
-        toolbar.setTitle("Jaquor.com");
+        toolbar.setTitle("Jaquar.com");
         toolbar.setTitleTextColor(Color.WHITE);
 
         toolbar.setBackgroundColor(getResources().getColor(R.color.toobarCOlor));
