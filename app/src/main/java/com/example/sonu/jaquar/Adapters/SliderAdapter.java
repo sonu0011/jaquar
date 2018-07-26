@@ -52,8 +52,8 @@ public class SliderAdapter extends RecyclerView.Adapter<SliderAdapter.MyViewHold
         ImageView imageView;
         public MyViewHolder(View itemView) {
             super(itemView);
-            textView =itemView.findViewById(R.id.sliderText);
-            imageView =itemView.findViewById(R.id.sliderImage);
+//            textView =itemView.findViewById(R.id.sliderText);
+//            imageView =itemView.findViewById(R.id.sliderImage);
         }
     }
 }

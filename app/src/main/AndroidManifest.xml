@@ -16,8 +16,8 @@
         <receiver
             android:name=".Receivers.NotificationBroadcaster"
             android:enabled="true"
-            android:exported="true"
-            />
+            android:exported="true" />
+
         <activity
             android:name=".LoginActivity"
             android:screenOrientation="portrait"
@@ -35,10 +35,10 @@
         <receiver
             android:name=".Receivers.InternetReceiver"
             android:enabled="true"
-            android:exported="true"
-            >
+            android:exported="true">
             <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"
+                <action
+                    android:name="android.net.conn.CONNECTIVITY_CHANGE"
                     tools:ignore="BatteryLife" />
             </intent-filter>
         </receiver>
@@ -78,6 +78,10 @@
             android:name=".HomeSearch"
             android:label="@string/title_activity_home_search"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name=".Models.SliderActivity" />
+        <activity android:name=".sliderNewActivity" />
+        <activity android:name=".TinderActivity"></activity>
+        <activity android:name=".FavouritesActivity"></activity>
     </application>
 
 </manifest>

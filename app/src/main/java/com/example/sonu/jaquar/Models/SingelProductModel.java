@@ -5,17 +5,25 @@ package com.example.sonu.jaquar.Models;
  */
 
 public class SingelProductModel {
-    String image,price,productcode,title;
+    String image,price,productcode,title,whishlist;
     public SingelProductModel() {
     }
 
-    public SingelProductModel(String image, String price, String productcode, String title) {
+    public SingelProductModel(String image, String price, String productcode, String title,String whishlist) {
         this.image = image;
         this.price = price;
         this.productcode = productcode;
         this.title = title;
+        this.whishlist =whishlist;
     }
 
+    public String getWhishlist() {
+        return whishlist;
+    }
+
+    public void setWhishlist(String whishlist) {
+        this.whishlist = whishlist;
+    }
 
     public String getImage() {
         return image;

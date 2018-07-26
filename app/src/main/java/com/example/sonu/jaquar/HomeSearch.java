@@ -149,8 +149,9 @@ public class HomeSearch extends AppCompatActivity {
                                     String productcode = value.child("productcode").getValue(String.class);
                                     String price = value.child("price").getValue(String.class);
                                     String title = value.child("title").getValue(String.class);
+                                    String whishlist = value.child("whishlist").getValue(String.class);
                                     if (image != null && productcode != null && price != null && title != null) {
-                                        list.add(new SingelProductModel(image,price,productcode,title));
+                                        list.add(new SingelProductModel(image,price,productcode,title,whishlist));
                                     }
                                 }
                                 progressDialog.dismiss();

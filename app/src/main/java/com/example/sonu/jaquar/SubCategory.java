@@ -194,18 +194,19 @@ ProgressDialog progressDialog;
                 String price = ds.child("price").getValue(String.class);
                 String productcode = ds.child("productcode").getValue(String.class);
                 String title = ds.child("title").getValue(String.class);
+                String whishlist    = ds.child("whishlist").getValue(String.class);
                 if (image!=null && price !=null && productcode != null &&title !=null) {
                     Log.d("ppp", image +" "+price+" "+productcode+" "+title);
                     //listSingleProduct =new ArrayList<>();
 
-                    singelProductModel =new SingelProductModel(image,price,productcode,title);
+                    singelProductModel =new SingelProductModel(image,price,productcode,title,whishlist);
                     listSingleProduct.add(singelProductModel);
                     Log.d("listSizeinside", String.valueOf(listSingleProduct.size()));
                 }
             }
           Log.d("arraylistSize", String.valueOf(listSingleProduct.size()));
 
-          sIngleProductAdapter =new SIngleProductAdapter(getApplicationContext(),listSingleProduct);
+          sIngleProductAdapter =new SIngleProductAdapter(getApplicationContext(),listSingleProduct,getTitleName);
           recyclerView.setAdapter(sIngleProductAdapter);
           ;
       }
@@ -232,18 +233,19 @@ ProgressDialog progressDialog;
                         String price = ds.child("price").getValue(String.class);
                         String productcode = ds.child("productcode").getValue(String.class);
                         String title = ds.child("title").getValue(String.class);
+                        String whishlist    = ds.child("whishlist").getValue(String.class);
 
                         if (image!=null && price !=null && productcode != null &&title !=null) {
                             Log.d("ppp", image +" "+price+" "+productcode+" "+title);
                             //listSingleProduct =new ArrayList<>();
-                            singelProductModel =new SingelProductModel(image,price,productcode,title);
+                            singelProductModel =new SingelProductModel(image,price,productcode,title,whishlist);
                             listSingleProduct.add(singelProductModel);
                             Log.d("listSizeinside", String.valueOf(listSingleProduct.size()));
                         }
                     }
                     Log.d("arraylistSize", String.valueOf(listSingleProduct.size()));
 
-                    sIngleProductAdapter =new SIngleProductAdapter(getApplicationContext(),listSingleProduct);
+                    sIngleProductAdapter =new SIngleProductAdapter(getApplicationContext(),listSingleProduct,getTitleName);
                     recyclerView.setAdapter(sIngleProductAdapter);
                 }
 
@@ -263,7 +265,7 @@ ProgressDialog progressDialog;
                     for (DataSnapshot ds : dataSnapshot.child(getTitleName + " ").child("SubAccessories").getChildren()) {
 
                         SubAccessoriesModel subAccessoriesModel = ds.getValue(SubAccessoriesModel.class);
-                        Log.d("====", subAccessoriesModel.getImage() + subAccessoriesModel.getTitle());
+                        //Log.d("====", subAccessoriesModel.getImage() + subAccessoriesModel.getTitle());
                         list.add(subAccessoriesModel);
 
 

@@ -46,10 +46,10 @@ public class PagerAdapter extends android.support.v4.view.PagerAdapter{
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
         View view  = layoutInflater.inflate(R.layout.sliderayout,container,false);
            SliderModel sliderModel =  list.get(position);
-          ImageView imageView = view.findViewById(R.id.sliderImage);
-          TextView  textView = view.findViewById(R.id.sliderText);
-        Glide.with(context).load(sliderModel.getImage()).into(imageView);
-        textView.setText(sliderModel.getTitle());
+//          ImageView imageView = view.findViewById(R.id.sliderImage);
+//          TextView  textView = view.findViewById(R.id.sliderText);
+//        Glide.with(context).load(sliderModel.getImage()).into(imageView);
+//        textView.setText(sliderModel.getTitle());
         ViewPager viewPager = (ViewPager) container;
         viewPager.addView(view,0);
         viewPager.notifyAll();

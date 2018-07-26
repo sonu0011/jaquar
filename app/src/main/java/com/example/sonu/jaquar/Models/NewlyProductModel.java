@@ -18,10 +18,11 @@ public class NewlyProductModel {
     public NewlyProductModel() {
     }
 
-    public NewlyProductModel(String image, String title, String productcode) {
+    public NewlyProductModel(String image, String title, String productcode,String price) {
         this.image = image;
         this.title = title;
         this.productcode = productcode;
+
     }
 
     public String getImage() {

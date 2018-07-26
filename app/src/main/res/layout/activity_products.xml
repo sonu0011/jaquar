@@ -13,8 +13,15 @@
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/productsToolbar"
         android:layout_marginTop="5dp"
         android:id="@+id/productRecyclerView"/>
+
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_alignParentBottom="true"
+
+        android:id="@+id/productsnackbar"
+        android:layout_height="wrap_content" />
 </RelativeLayout>

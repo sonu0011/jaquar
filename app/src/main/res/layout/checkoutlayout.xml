@@ -113,7 +113,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dp"
             android:layout_toRightOf="@+id/decreaseItem"
-            android:text="Delete"
+            android:text="Remove"
             android:fontFamily="@font/custom_font"
             android:textStyle="bold"
             android:textAllCaps="false"

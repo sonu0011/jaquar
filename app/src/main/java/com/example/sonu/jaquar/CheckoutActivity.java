@@ -80,7 +80,7 @@ ProgressDialog progressDialog;
         toolbar.setTitle("Jaquor.com");
         toolbar.setTitleTextColor(Color.WHITE);
         toolbar.setBackgroundColor(getResources().getColor(R.color.toobarCOlor));
-          setSupportActionBar(toolbar);
+            setSupportActionBar(toolbar);
            getSupportActionBar().setDisplayShowTitleEnabled(true);
            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
            getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -103,15 +103,13 @@ ProgressDialog progressDialog;
                 int a = Integer.valueOf(textView.getText().toString());
                 if (a>0) {
                     Notification notification = new NotificationCompat.Builder(getApplicationContext(), "n1")
-                            .setContentTitle("Total Rs" + textView.getText().toString())
-                            .setContentText("Your Account Debited INR " + textView.getText().toString() + " on " + new Date())
+
+                            .setContentText("Your order has been placed successfully")
                             .setSmallIcon(R.drawable.ic_notifications_black_24dp)
                             .setPriority(NotificationCompat.PRIORITY_HIGH)
-                            .setColor(Color.BLUE)
+                            .setColor(Color.GREEN)
                             //Big text Style
                             .setStyle(new NotificationCompat.BigTextStyle()
-                                    .bigText("Your Account Debited INR " + textView.getText().toString() + " on" + new Date())
-                                    .setBigContentTitle("Total Rs" + textView.getText().toString())
                                     .setSummaryText("Thanks For Shopping!!!"))
 
                             .build();

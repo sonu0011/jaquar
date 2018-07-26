@@ -54,9 +54,9 @@ Context context;
 
         if(holder instanceof SliderViewHolder)
         {
-           HomeDataModel  homeDataModel =  homeDataModels.get(position);
-            Glide.with(context).load(homeDataModel.getSliderimage()).into(((SliderViewHolder) holder).sliderimage);
-            ((SliderViewHolder) holder).sliderTitle.setText(homeDataModel.getSlidertitle());
+//           HomeDataModel  homeDataModel =  homeDataModels.get(position);
+//            Glide.with(context).load(homeDataModel.getSliderimage()).into(((SliderViewHolder) holder).sliderimage);
+//            ((SliderViewHolder) holder).sliderTitle.setText(homeDataModel.getSlidertitle());
         }
         if(holder instanceof NewProductViewHolder)
         {
@@ -95,8 +95,8 @@ Context context;
 
         public SliderViewHolder(View itemView) {
             super(itemView);
-            sliderimage =itemView.findViewById(R.id.sliderImage);
-            sliderTitle =itemView.findViewById(R.id.sliderText);
+//            sliderimage =itemView.findViewById(R.id.sliderImage);
+//            sliderTitle =itemView.findViewById(R.id.sliderText);
         }
     }
     public class NewProductViewHolder extends RecyclerView.ViewHolder

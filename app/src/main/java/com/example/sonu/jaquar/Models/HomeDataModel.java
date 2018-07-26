@@ -9,7 +9,6 @@ public class HomeDataModel {
 
     public HomeDataModel() {
     }
-
     public HomeDataModel(String title, String image, String price, String productcode, String sliderimage, String slidertitle) {
         this.title = title;
         this.image = image;
@@ -18,7 +17,6 @@ public class HomeDataModel {
         this.sliderimage = sliderimage;
         this.slidertitle = slidertitle;
     }
-
     public String getTitle() {
         return title;
     }
@@ -26,7 +24,6 @@ public class HomeDataModel {
     public void setTitle(String title) {
         this.title = title;
     }
-
     public String getImage() {
         return image;
     }

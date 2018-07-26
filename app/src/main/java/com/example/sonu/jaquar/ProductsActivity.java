@@ -3,6 +3,7 @@ package com.example.sonu.jaquar;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -40,10 +41,12 @@ List<SingelProductModel>list;
 SIngleProductAdapter sIngleProductAdapter;
 SingelProductModel singelProductModel;
 ProgressDialog progressDialog;
+CoordinatorLayout coordinatorLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_products);
+        coordinatorLayout =findViewById(R.id.productsnackbar);
         categoryname = SearchConstants.CATEGOTY_NAME;
         subcategory =SearchConstants.SUBCATEGOTY_NAME;
 //        if(categoryname==null)
@@ -146,9 +149,11 @@ ProgressDialog progressDialog;
                         String price =ds.child("price").getValue(String.class);
                         String productcode =ds.child("productcode").getValue(String.class);
                         String title =ds.child("title").getValue(String.class);
+                        String whishlist    = ds.child("whishlist").getValue(String.class);
+
                         if (image!=null && price !=null && productcode != null &&title !=null) {
                             Log.d("ppp", image +" "+price+" "+productcode+" "+title);
-                            singelProductModel =new SingelProductModel(image,price,productcode,title);
+                            singelProductModel =new SingelProductModel(image,price,productcode,title,whishlist);
                             list.add(singelProductModel);
                             Log.d("listSizeinside", String.valueOf(list.size()));
 
@@ -162,10 +167,12 @@ ProgressDialog progressDialog;
                         String price = ds.child("price").getValue(String.class);
                         String productcode = ds.child("productcode").getValue(String.class);
                         String title = ds.child("title").getValue(String.class);
+                        String whishlist    = ds.child("whishlist").getValue(String.class);
+
                         if (image != null && price != null && productcode != null && title != null) {
 
                             Log.d("ppp", image + " " + price + " " + productcode + " " + title);
-                            singelProductModel = new SingelProductModel(image, price, productcode, title);
+                            singelProductModel = new SingelProductModel(image, price, productcode, title,whishlist);
                             list.add(singelProductModel);
                             Log.d("listSizeinside", String.valueOf(list.size()));
                         }
@@ -173,7 +180,7 @@ ProgressDialog progressDialog;
                     }
                 }
                     Log.d("arraylistSize", String.valueOf(list.size()));
-                    sIngleProductAdapter =new SIngleProductAdapter(getApplicationContext(),list);
+                    sIngleProductAdapter =new SIngleProductAdapter(getApplicationContext(),list,categoryname,subcategory,coordinatorLayout);
                     recyclerView.setAdapter(sIngleProductAdapter);
                 }
             @Override
