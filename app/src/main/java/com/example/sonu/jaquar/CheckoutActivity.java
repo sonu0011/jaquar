@@ -9,6 +9,8 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
+import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.view.MenuItemCompat;
@@ -31,14 +33,21 @@ import android.widget.Toast;
 import com.example.sonu.jaquar.Adapters.CheckOutAdapter;
 import com.example.sonu.jaquar.Constants.SearchConstants;
 import com.example.sonu.jaquar.Models.CheckOutMOdel;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -60,6 +69,8 @@ String                            tag ="0001CheckOutActivity";
 LinearLayoutManager               linearLayoutManager;
 NotificationManager               notificationManager;
 NotificationChannel               notificationChannel;
+Handler handler;
+Runnable runnable;
 ProgressDialog progressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,29 +106,103 @@ ProgressDialog progressDialog;
         firebaseAuth =FirebaseAuth.getInstance();
         firebaseUser =firebaseAuth.getCurrentUser();
         firebaseDatabase =FirebaseDatabase.getInstance();
-        databaseReference =firebaseDatabase.getReference(firebaseUser.getUid());
+        databaseReference =firebaseDatabase.getReference("cartValues").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+
         Log.d("SearchConstantValueoc", String.valueOf(SearchConstants.totalpriceValue));
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 int a = Integer.valueOf(textView.getText().toString());
                 if (a>0) {
-                    Notification notification = new NotificationCompat.Builder(getApplicationContext(), "n1")
+                FirebaseDatabase fd=FirebaseDatabase.getInstance();
+                DatabaseReference db  =fd.getReference();
+                final DatabaseReference db1 =db.child("orderHistory").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).push();
+
+                databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot ds:dataSnapshot.getChildren()) {
+                            String pcode =ds.child("productcode").getValue(String.class);
+
+                            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                            Date date = new Date();
+                            String strDate = dateFormat.format(date).toString();
+                            FirebaseDatabase val = FirebaseDatabase.getInstance();
+                            DatabaseReference ref = val.getReference();
+                            DatabaseReference data = ref.child("OrdersDate").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).push()
+                                    .child(pcode);
+                            data.child("time").setValue(strDate);
+                            data.child("productcode").setValue(pcode);
+                        }
+                                       db1.setValue(dataSnapshot.getValue()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if(task.isSuccessful())
+                                {
+                                    Log.d("orderHistorySaved","yes");
+                                }
+                                else {
+                                    Log.d("orderHistorySaved","NO");
+
+                                }
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+//                    FirebaseDatabase.getInstance().getReference("orderHistory").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+//                            .addValueEventListener(new ValueEventListener() {
+//                                @Override
+//                                public void onDataChange(DataSnapshot dataSnapshot) {
+//                                for (DataSnapshot ds:dataSnapshot.getChildren())
+//                                {
+//                                    String pcode = ds.child("productcide").getValue(String.class);
+//                                    if (pcode != null) {
+//                                        Log.d("***",""+pcode);
+////                                        FirebaseDatabase val = FirebaseDatabase.getInstance();
+////                                        DatabaseReference ref = val.getReference();
+////                                        DatabaseReference data = ref.child("OrdersDate").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+////                                                .child(pcode);
+////                                        data.child("time").setValue(ServerValue.TIMESTAMP);
+//
+//                                    }
+//                                }
+//                                }
+//
+//                                @Override
+//                                public void onCancelled(DatabaseError databaseError) {
+//
+//                                }
+//                            });
+
+                    final Notification notification = new NotificationCompat.Builder(getApplicationContext(), "n1")
 
                             .setContentText("Your order has been placed successfully")
                             .setSmallIcon(R.drawable.ic_notifications_black_24dp)
                             .setPriority(NotificationCompat.PRIORITY_HIGH)
                             .setColor(Color.GREEN)
                             //Big text Style
+                            .setAutoCancel(true)
                             .setStyle(new NotificationCompat.BigTextStyle()
                                     .setSummaryText("Thanks For Shopping!!!"))
 
                             .build();
+
+                    //databaseReference.removeValue();
                     notificationManagerCompat.notify(2, notification);
-                    databaseReference.removeValue();
-                    startActivity(new Intent(CheckoutActivity.this,HomeActivity.class));
+                    Intent intent =new Intent(CheckoutActivity.this,HomeActivity.class);
+                    intent.putExtra("deleteitem","delete");
+                    startActivity(intent);
                     finish();
+
                 }
+
+
                 Toast.makeText(CheckoutActivity.this, "Thanks for using this app", Toast.LENGTH_SHORT).show();
 
             }

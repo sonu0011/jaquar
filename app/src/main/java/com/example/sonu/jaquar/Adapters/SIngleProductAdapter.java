@@ -59,11 +59,12 @@ public class SIngleProductAdapter extends RecyclerView.Adapter<SIngleProductAdap
         this.coordinatorLayout = coordinatorLayout;
     }
 
-    public SIngleProductAdapter(Context context, List<SingelProductModel> list, String anothercat) {
+    public SIngleProductAdapter(Context context, List<SingelProductModel> list, String anothercat,CoordinatorLayout cl) {
         this.context = context;
         this.list = list;
         this.anothercat = anothercat;
         Log.d("####an",anothercat);
+        this.coordinatorLayout =cl;
     }
 
     public SIngleProductAdapter(Context context, List<SingelProductModel> list, String categoryname, String subcategory) {
@@ -154,7 +155,7 @@ if(singelProductModel.getWhishlist().equals("1"))
                 final String price = singelProductModel.getPrice();
                 final String productcodev = singelProductModel.getProductcode();
                 String whishlist = singelProductModel.getWhishlist();
-                if (categoryname == null) {
+                if (categoryname == null && anothercat ==null) {
                     fd = FirebaseDatabase.getInstance();
                     db = fd.getReference("categoreis");
                     db.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -240,148 +241,156 @@ if(singelProductModel.getWhishlist().equals("1"))
                     });
 
                 }
-//                else if(anothercat.equals("Steam Cabins")){
-////                    Toast.makeText(context, ""+anothercat, Toast.LENGTH_SHORT).show();
-//
-////                    fd = FirebaseDatabase.getInstance();
-////                    db = fd.getReference("categoreis");
-////                    db.addListenerForSingleValueEvent(new ValueEventListener() {
-////                        @Override
-////                        public void onDataChange(DataSnapshot dataSnapshot) {
-////                            for (DataSnapshot ds : dataSnapshot.child("Steam Cabins ").getChildren()) {
-////                                {
-////                                    String pcode = ds.child("productcode").getValue(String.class);
-////                                    String fav = ds.child("whishlist").getValue(String.class);
-////                                    if (pcode != null) {
-////                                        if (pcode.equals(productcodev)) {
-////                                            if (fav != null) {
-////                                                if (fav.equals("0")) {
-////                                                    i = 1;
-////                                                    Log.d("fav", "yes");
-////                                                    firebaseDatabase = FirebaseDatabase.getInstance();
-////                                                    databaseReference = firebaseDatabase.getReference();
-////                                                    DatabaseReference databaseReference1 = databaseReference.child("favourites").child((FirebaseAuth.getInstance().getCurrentUser().getUid())).push();
-////                                                    databaseReference1.child("title").setValue(title);
-////                                                    databaseReference1.child("image").setValue(image);
-////                                                    databaseReference1.child("price").setValue(price);
-////                                                    databaseReference1.child("productcode").setValue(productcodev);
-////                                                    int color = Color.parseColor("#FF0000"); //The color u want
-////                                                    wishlistimage.setColorFilter(color);
-////                                                    ds.getRef().child("whishlist").setValue("1");
-////                                                }
-////                                                if (fav.equals("1")) {
-////                                                    int color = Color.parseColor("#39000000"); //The color u want
-////                                                    wishlistimage.setColorFilter(color);
-////                                                    ds.getRef().child("whishlist").setValue("0");
-////                                                    FirebaseDatabase.getInstance().getReference("favourites").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-////                                                            .addListenerForSingleValueEvent(new ValueEventListener() {
-////                                                                @Override
-////                                                                public void onDataChange(DataSnapshot dataSnapshot) {
-////                                                                    for (DataSnapshot val : dataSnapshot.getChildren()) {
-////                                                                        String code = val.child("productcode").getValue(String.class);
-////                                                                        if (code.equals(productcodev)) {
-////                                                                            val.getRef().removeValue();
-////                                                                        }
-////                                                                    }
-////                                                                }
-////
-////                                                                @Override
-////                                                                public void onCancelled(DatabaseError databaseError) {
-////
-////                                                                }
-////                                                            });
-////
-//////                                                ds.getRef().child("whishlist").setValue("0");
-////
-////                                                }
-////                                            }
-////
-////                                        }
-////                                    }
-////
-////                                }
-////
-////                            }
-////                        }
-////
-////
-////                        @Override
-////                        public void onCancelled(DatabaseError databaseError) {
-////
-////                        }
-////                    });
-//                }
-//                else if(anothercat.equals("Whirlpools ")){
-//                    fd = FirebaseDatabase.getInstance();
-//                    db = fd.getReference("categoreis");
-//                    db.addListenerForSingleValueEvent(new ValueEventListener() {
-//                        @Override
-//                        public void onDataChange(DataSnapshot dataSnapshot) {
-//                            for (DataSnapshot ds : dataSnapshot.child("Whirlpools ").getChildren()) {
-//                                {
-//                                    String pcode = ds.child("productcode").getValue(String.class);
-//                                    String fav = ds.child("whishlist").getValue(String.class);
-//                                    if (pcode != null) {
-//                                        if (pcode.equals(productcodev)) {
-//                                            if (fav != null) {
-//                                                if (fav.equals("0")) {
-//                                                    i = 1;
-//                                                    Log.d("fav", "yes");
-//                                                    firebaseDatabase = FirebaseDatabase.getInstance();
-//                                                    databaseReference = firebaseDatabase.getReference();
-//                                                    DatabaseReference databaseReference1 = databaseReference.child("favourites").child((FirebaseAuth.getInstance().getCurrentUser().getUid())).push();
-//                                                    databaseReference1.child("title").setValue(title);
-//                                                    databaseReference1.child("image").setValue(image);
-//                                                    databaseReference1.child("price").setValue(price);
-//                                                    databaseReference1.child("productcode").setValue(productcodev);
-//                                                    int color = Color.parseColor("#FF0000"); //The color u want
-//                                                    wishlistimage.setColorFilter(color);
-//                                                    ds.getRef().child("whishlist").setValue("1");
-//                                                }
-//
-//
-//                                                if (fav.equals("1")) {
-//                                                    int color = Color.parseColor("#39000000"); //The color u want
-//                                                    wishlistimage.setColorFilter(color);
-//                                                    ds.getRef().child("whishlist").setValue("0");
-//                                                    FirebaseDatabase.getInstance().getReference("favourites").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-//                                                            .addListenerForSingleValueEvent(new ValueEventListener() {
-//                                                                @Override
-//                                                                public void onDataChange(DataSnapshot dataSnapshot) {
-//                                                                    for (DataSnapshot val : dataSnapshot.getChildren()) {
-//                                                                        String code = val.child("productcode").getValue(String.class);
-//                                                                        if (code.equals(productcodev)) {
-//                                                                            val.getRef().removeValue();
-//                                                                        }
-//                                                                    }
-//                                                                }
-//
-//                                                                @Override
-//                                                                public void onCancelled(DatabaseError databaseError) {
-//
-//                                                                }
-//                                                            });
-//
-////                                                ds.getRef().child("whishlist").setValue("0");
-//
-//                                                }
-//                                            }
-//
-//                                        }
-//                                    }
-//
-//                                }
-//
-//                            }
-//                        }
-//
-//
-//                        @Override
-//                        public void onCancelled(DatabaseError databaseError) {
-//
-//                        }
-//                    });
-//                }
+                else if(anothercat !=null) {
+                    if (anothercat.equals("Steam Cabins")) {
+//                    Toast.makeText(context, ""+anothercat, Toast.LENGTH_SHORT).show();
+
+                        fd = FirebaseDatabase.getInstance();
+                        db = fd.getReference("categoreis");
+                        db.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                for (DataSnapshot ds : dataSnapshot.child("Steam Cabins ").getChildren()) {
+                                    {
+                                        String pcode = ds.child("productcode").getValue(String.class);
+                                        String fav = ds.child("whishlist").getValue(String.class);
+                                        if (pcode != null) {
+                                            if (pcode.equals(productcodev)) {
+                                                if (fav != null) {
+                                                    if (fav.equals("0")) {
+                                                        i = 1;
+                                                        Log.d("fav", "yes");
+                                                        firebaseDatabase = FirebaseDatabase.getInstance();
+                                                        databaseReference = firebaseDatabase.getReference();
+                                                        DatabaseReference databaseReference1 = databaseReference.child("favourites").child((FirebaseAuth.getInstance().getCurrentUser().getUid())).push();
+                                                        databaseReference1.child("title").setValue(title);
+                                                        databaseReference1.child("image").setValue(image);
+                                                        databaseReference1.child("price").setValue(price);
+                                                        databaseReference1.child("productcode").setValue(productcodev);
+                                                        int color = Color.parseColor("#FF0000"); //The color u want
+                                                        wishlistimage.setColorFilter(color);
+                                                        ds.getRef().child("whishlist").setValue("1");
+                                                        Snackbar.make(coordinatorLayout, "Added to Whishlist", Snackbar.LENGTH_SHORT).show();
+
+                                                    }
+                                                    if (fav.equals("1")) {
+                                                        int color = Color.parseColor("#39000000"); //The color u want
+                                                        wishlistimage.setColorFilter(color);
+                                                        ds.getRef().child("whishlist").setValue("0");
+                                                        FirebaseDatabase.getInstance().getReference("favourites").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                                                .addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                    @Override
+                                                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                                                        for (DataSnapshot val : dataSnapshot.getChildren()) {
+                                                                            String code = val.child("productcode").getValue(String.class);
+                                                                            if (code.equals(productcodev)) {
+                                                                                val.getRef().removeValue();
+                                                                            }
+                                                                        }
+                                                                    }
+
+                                                                    @Override
+                                                                    public void onCancelled(DatabaseError databaseError) {
+
+                                                                    }
+                                                                });
+
+                                                        ds.getRef().child("whishlist").setValue("0");
+
+                                                    }
+                                                }
+
+                                            }
+                                        }
+
+                                    }
+
+                                }
+                            }
+
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+                }
+                else if(anothercat !=null) {
+                    if (anothercat.equals("Whirlpools")) {
+                        fd = FirebaseDatabase.getInstance();
+                        db = fd.getReference("categoreis");
+                        db.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                for (DataSnapshot ds : dataSnapshot.child("Whirlpools ").getChildren()) {
+                                    {
+                                        String pcode = ds.child("productcode").getValue(String.class);
+                                        String fav = ds.child("whishlist").getValue(String.class);
+                                        if (pcode != null) {
+                                            if (pcode.equals(productcodev)) {
+                                                if (fav != null) {
+                                                    if (fav.equals("0")) {
+                                                        i = 1;
+                                                        Log.d("fav", "yes");
+                                                        firebaseDatabase = FirebaseDatabase.getInstance();
+                                                        databaseReference = firebaseDatabase.getReference();
+                                                        DatabaseReference databaseReference1 = databaseReference.child("favourites").child((FirebaseAuth.getInstance().getCurrentUser().getUid())).push();
+                                                        databaseReference1.child("title").setValue(title);
+                                                        databaseReference1.child("image").setValue(image);
+                                                        databaseReference1.child("price").setValue(price);
+                                                        databaseReference1.child("productcode").setValue(productcodev);
+                                                        int color = Color.parseColor("#FF0000"); //The color u want
+                                                        wishlistimage.setColorFilter(color);
+                                                        ds.getRef().child("whishlist").setValue("1");
+                                                        Snackbar.make(coordinatorLayout, "Added to Whishlist", Snackbar.LENGTH_SHORT).show();
+
+                                                    }
+
+
+                                                    if (fav.equals("1")) {
+                                                        int color = Color.parseColor("#39000000"); //The color u want
+                                                        wishlistimage.setColorFilter(color);
+                                                        ds.getRef().child("whishlist").setValue("0");
+                                                        FirebaseDatabase.getInstance().getReference("favourites").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                                                .addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                    @Override
+                                                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                                                        for (DataSnapshot val : dataSnapshot.getChildren()) {
+                                                                            String code = val.child("productcode").getValue(String.class);
+                                                                            if (code.equals(productcodev)) {
+                                                                                val.getRef().removeValue();
+                                                                            }
+                                                                        }
+                                                                    }
+
+                                                                    @Override
+                                                                    public void onCancelled(DatabaseError databaseError) {
+
+                                                                    }
+                                                                });
+
+//                                                ds.getRef().child("whishlist").setValue("0");
+
+                                                    }
+                                                }
+
+                                            }
+                                        }
+
+                                    }
+
+                                }
+                            }
+
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+                }
 
                 else{
 

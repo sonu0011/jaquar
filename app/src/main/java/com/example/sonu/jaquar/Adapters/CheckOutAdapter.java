@@ -112,7 +112,7 @@ TextView tpriceValue;
         Log.d("DecreaseProductcode",pcode1);
         final String uid1 =  FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        FirebaseDatabase.getInstance().getReference(uid1).addListenerForSingleValueEvent(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference("cartValues").child(uid1).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot ds1 : dataSnapshot.getChildren()) {
@@ -133,8 +133,8 @@ TextView tpriceValue;
                             HashMap<String, Object> result = new HashMap<>();
                             result.put("quantity", String.valueOf(qu));
                             result.put("totalprice", String.valueOf(ppi1 * qu));
-                            FirebaseDatabase.getInstance().getReference(uid1).child(pcode1).updateChildren(result);
-                            FirebaseDatabase.getInstance().getReference(uid1).child(pcode1).updateChildren(result);
+                            FirebaseDatabase.getInstance().getReference("cartVlues").child(uid1).child(pcode1).updateChildren(result);
+                            FirebaseDatabase.getInstance().getReference("cartValues").child(uid1).child(pcode1).updateChildren(result);
 
                         }
                     }
@@ -161,7 +161,7 @@ TextView tpriceValue;
         Log.d("increaseProductcode",pcode);
        final String uid =  FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-       FirebaseDatabase.getInstance().getReference(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+       FirebaseDatabase.getInstance().getReference("cartValues").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
            @Override
            public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -181,8 +181,8 @@ TextView tpriceValue;
                                HashMap<String, Object> result = new HashMap<>();
                                result.put("quantity", String.valueOf(qty));
                                result.put("totalprice", String.valueOf(ppi * qty));
-                               FirebaseDatabase.getInstance().getReference(uid).child(pcode).updateChildren(result);
-                               FirebaseDatabase.getInstance().getReference(uid).child(pcode).updateChildren(result);
+                               FirebaseDatabase.getInstance().getReference("cartValues").child(uid).child(pcode).updateChildren(result);
+                               FirebaseDatabase.getInstance().getReference("cartValues").child(uid).child(pcode).updateChildren(result);
 
                            }
                        }
@@ -274,7 +274,7 @@ TextView tpriceValue;
                    FirebaseDatabase firebaseDatabase =FirebaseDatabase.getInstance();
                    FirebaseAuth firebaseAuth =FirebaseAuth.getInstance();
                    FirebaseUser firebaseUser =firebaseAuth.getCurrentUser();
-                   final DatabaseReference databaseReference = firebaseDatabase.getReference(firebaseUser.getUid());
+                   final DatabaseReference databaseReference = firebaseDatabase.getReference("cartValues").child(firebaseUser.getUid());
                    databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                        @Override
                        public void onDataChange(DataSnapshot dataSnapshot) {

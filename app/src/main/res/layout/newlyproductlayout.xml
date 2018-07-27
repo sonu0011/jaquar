@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-    <RelativeLayout
-        android:background="#fff"
-       android:layout_marginTop="2dp"
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+
+        android:background="@drawable/bordertop"
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageView
@@ -80,10 +78,4 @@
     android:id="@+id/newlyViewMore"
     android:layout_marginTop="3dp"/>
     </RelativeLayout>
-<View
-    android:layout_width="match_parent"
-    android:layout_height="1dp"
-    android:layout_marginTop="185dp"
-    android:background="#6e000000"
-    />
-</android.support.v7.widget.CardView>
+

@@ -78,10 +78,15 @@
             android:name=".HomeSearch"
             android:label="@string/title_activity_home_search"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity android:name=".Models.SliderActivity" />
-        <activity android:name=".sliderNewActivity" />
-        <activity android:name=".TinderActivity"></activity>
-        <activity android:name=".FavouritesActivity"></activity>
+        <activity android:name=".Models.SliderActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".sliderNewActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".FavouritesActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".OrdersHistory"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

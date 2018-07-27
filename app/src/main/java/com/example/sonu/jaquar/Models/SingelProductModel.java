@@ -1,5 +1,7 @@
 package com.example.sonu.jaquar.Models;
 
+import android.util.Log;
+
 /**
  * Created by sonu on 1/7/18.
  */
@@ -15,6 +17,7 @@ public class SingelProductModel {
         this.productcode = productcode;
         this.title = title;
         this.whishlist =whishlist;
+        //Log.d("###whishlist",whishlist);
     }
 
     public String getWhishlist() {

@@ -132,10 +132,18 @@ public class HomeActivity extends AppCompatActivity
     private SliderView sliderView;
     private LinearLayout mLinearLayout;
     NavigationView navigationView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+       String delete = getIntent().getStringExtra("deleteitem");
+       if (delete!=null){
+           if (delete.equals("delete")){
+               DatabaseReference ref = FirebaseDatabase.getInstance().getReference("cartValues").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+               ref.removeValue();
+           }
+       }
 
 
         sliderView = (SliderView) findViewById(R.id.sliderView);
@@ -161,7 +169,7 @@ public class HomeActivity extends AppCompatActivity
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
         FirebaseDatabase firebaseDatabase1 = FirebaseDatabase.getInstance();
-        DatabaseReference databaseReference1 = firebaseDatabase1.getReference(firebaseUser.getUid());
+        DatabaseReference databaseReference1 = firebaseDatabase1.getReference("cartValues").child(firebaseUser.getUid());
         userEmail = firebaseUser.getEmail();
         databaseReference1.addValueEventListener(new ValueEventListener() {
             @Override
@@ -271,6 +279,7 @@ public class HomeActivity extends AppCompatActivity
         gallery.setGravity(Gravity.CENTER_VERTICAL);
         gallery.setTypeface(null, Typeface.BOLD);
         gallery.setTextColor(Color.RED);
+
         FirebaseDatabase.getInstance().getReference("favourites").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                 .addValueEventListener(new ValueEventListener() {
                     @Override
@@ -284,6 +293,7 @@ public class HomeActivity extends AppCompatActivity
 
                     }
                 });
+
 
     }
 
@@ -353,7 +363,7 @@ public class HomeActivity extends AppCompatActivity
         FirebaseAuth fa = FirebaseAuth.getInstance();
         FirebaseUser firebaseUser = fa.getCurrentUser();
         FirebaseDatabase fd = FirebaseDatabase.getInstance();
-        DatabaseReference db = fd.getReference(firebaseUser.getUid());
+        DatabaseReference db = fd.getReference("cartValues").child(firebaseUser.getUid());
         db.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -398,6 +408,7 @@ public class HomeActivity extends AppCompatActivity
             startActivity(new Intent(HomeActivity.this, LoginActivity.class));
             finish();
         }
+
         return super.onOptionsItemSelected(item);
     }
     @SuppressWarnings("StatementWithEmptyBody")
@@ -429,7 +440,11 @@ public class HomeActivity extends AppCompatActivity
         if (id == R.id.nav_profile) {
             startActivity(new Intent(HomeActivity.this,FavouritesActivity.class));
         }
+        if (id==R.id.orderHIstory){
 
+            startActivity(new Intent(HomeActivity.this,OrdersHistory.class));
+
+        }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

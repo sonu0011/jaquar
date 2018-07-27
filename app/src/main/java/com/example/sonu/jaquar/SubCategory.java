@@ -3,6 +3,7 @@ package com.example.sonu.jaquar;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -44,7 +45,7 @@ FirebaseDatabase firebaseDatabase;
 DatabaseReference databaseReference;
 List<SubAccessoriesModel> list;
 List<SingelProductModel>listSingleProduct;
-
+CoordinatorLayout coordinatorLayout;
 SingelProductModel singelProductModel;
 SIngleProductAdapter sIngleProductAdapter;
 SubAccessoriesAdapter subAccessoriesAdapter;
@@ -54,6 +55,7 @@ ProgressDialog progressDialog;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sub_category);
+        coordinatorLayout =findViewById(R.id.cordinatesub);
         toolbar =findViewById(R.id.toolbarSubCategory);
         toolbar.setTitle("Jaquar.com");
         toolbar.setTitleTextColor(Color.WHITE);
@@ -206,7 +208,7 @@ ProgressDialog progressDialog;
             }
           Log.d("arraylistSize", String.valueOf(listSingleProduct.size()));
 
-          sIngleProductAdapter =new SIngleProductAdapter(getApplicationContext(),listSingleProduct,getTitleName);
+          sIngleProductAdapter =new SIngleProductAdapter(getApplicationContext(),listSingleProduct,getTitleName,coordinatorLayout);
           recyclerView.setAdapter(sIngleProductAdapter);
           ;
       }
@@ -245,7 +247,7 @@ ProgressDialog progressDialog;
                     }
                     Log.d("arraylistSize", String.valueOf(listSingleProduct.size()));
 
-                    sIngleProductAdapter =new SIngleProductAdapter(getApplicationContext(),listSingleProduct,getTitleName);
+                    sIngleProductAdapter =new SIngleProductAdapter(getApplicationContext(),listSingleProduct,getTitleName,coordinatorLayout);
                     recyclerView.setAdapter(sIngleProductAdapter);
                 }
 

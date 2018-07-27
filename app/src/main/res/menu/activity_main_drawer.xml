@@ -23,6 +23,8 @@
             android:icon="@drawable/ic_favorite_border_black_24dp"
             android:title="Your Wish List" />
         <item android:id="@+id/orderHIstory"
+            app:actionViewClass="android.widget.TextView"
+
             android:icon="@drawable/ic_history_black_24dp"
             android:title="Your Orders"
             />

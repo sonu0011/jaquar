@@ -4,29 +4,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#fff"
-    tools:context="com.example.sonu.jaquar.FavouritesActivity">
+    tools:context="com.example.sonu.jaquar.OrdersHistory">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/favtoolbar"
+        android:id="@+id/historytoolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        />
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/favouriterecycleview"
-
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_marginTop="55dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
-        android:layout_marginTop="60dp"/>
+        android:layout_height="match_parent"
+        android:id="@+id/historyrecycleview"/>
 
     <ImageView
-        android:id="@+id/nowhishlistimage"
+        android:id="@+id/noorderhistory"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
@@ -36,7 +34,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.498"
-        app:srcCompat="@drawable/nowhshlist1"
-        tools:ignore="MissingConstraints" />
+        app:srcCompat="@drawable/orderlist"
+        tools:ignore="MissingConstraints"/>
 
 </android.support.constraint.ConstraintLayout>

@@ -6,15 +6,15 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.sonu.jaquar.Adapters.FavourateAdapter;
-import com.example.sonu.jaquar.Adapters.NewlyProductAdapter;
-import com.example.sonu.jaquar.Adapters.SIngleProductAdapter;
+import com.example.sonu.jaquar.Adapters.HistoryAdapter;
+import com.example.sonu.jaquar.Models.HistoryModel;
 import com.example.sonu.jaquar.Models.NewlyProductModel;
-import com.example.sonu.jaquar.Models.SingelProductModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -24,19 +24,20 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FavouritesActivity extends AppCompatActivity {
-RecyclerView recyclerView;
-List<NewlyProductModel>list;
- Toolbar toolbar;
- ImageView imageView ;
-FavourateAdapter favourateAdapter;
+public class OrdersHistory extends AppCompatActivity {
+    Toolbar toolbar;
+    RecyclerView recyclerView;
+    List<HistoryModel> list;
+    HistoryAdapter historyAdapter;
+    ImageView imageView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_favourites);
-        imageView =findViewById(R.id.nowhishlistimage);
-        toolbar =findViewById(R.id.favtoolbar);
-        toolbar.setTitle("Favourites");
+        setContentView(R.layout.activity_orders_history);
+        imageView =findViewById(R.id.noorderhistory);
+        toolbar = findViewById(R.id.historytoolbar);
+        toolbar.setTitle("Your Orders");
         toolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
@@ -51,29 +52,27 @@ FavourateAdapter favourateAdapter;
                 onBackPressed();
             }
         });
-        recyclerView =findViewById(R.id.favouriterecycleview);
+        recyclerView = findViewById(R.id.historyrecycleview);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        list =new ArrayList<>();
-        FirebaseDatabase.getInstance().getReference("favourites").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                .addListenerForSingleValueEvent(new ValueEventListener() {
+        list = new ArrayList<>();
+        FirebaseDatabase.getInstance().getReference("orderHistory").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-
                         list.clear();
-                        if (!dataSnapshot.exists())
-                        {
+                        if (!dataSnapshot.exists()){
                             imageView.setVisibility(View.VISIBLE);
-                            recyclerView.setVisibility(View.INVISIBLE);
-
                         }
                         else {
                             for (DataSnapshot data : dataSnapshot.getChildren()) {
+                                for (DataSnapshot ds : data.getChildren()) {
+                                    HistoryModel model = ds.getValue(HistoryModel.class);
+                                    list.add(model);
+                                    historyAdapter = new HistoryAdapter(list, getApplicationContext());
+                                    recyclerView.setAdapter(historyAdapter);
+                                }
 
-                                NewlyProductModel model = data.getValue(NewlyProductModel.class);
-                                list.add(model);
-                                favourateAdapter = new FavourateAdapter(list, getApplicationContext());
-                                recyclerView.setAdapter(favourateAdapter);
 
                             }
                         }
@@ -84,5 +83,6 @@ FavourateAdapter favourateAdapter;
 
                     }
                 });
+//
     }
 }

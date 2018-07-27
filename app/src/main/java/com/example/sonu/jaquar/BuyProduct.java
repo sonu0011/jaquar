@@ -70,7 +70,7 @@ int checkProduct =0;
         firebaseAuth =FirebaseAuth.getInstance();
         firebaseUser =firebaseAuth.getCurrentUser();
         firebaseDatabase =FirebaseDatabase.getInstance();
-        databaseReference =firebaseDatabase.getReference(firebaseUser.getUid());
+        databaseReference =firebaseDatabase.getReference("cartValues").child(firebaseUser.getUid());
         productcode = getIntent().getStringExtra("productcode");
         toolbar.setTitle("Continue Shopping...");
         toolbar.setTitleTextColor(Color.CYAN);
@@ -124,7 +124,9 @@ int checkProduct =0;
         SearchConstants.Productcount =SearchConstants.Productcount+1;
         Log.d("!!!!","Add to cart");
         Log.d("New Item ","COUNT"+String.valueOf(SearchConstants.Productcount));
-        DatabaseReference child_db =databaseReference.child(productcode);
+        DatabaseReference ref  =FirebaseDatabase.getInstance().getReference("cartValues").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+
+        DatabaseReference child_db =ref.child(productcode);
         child_db.child("image").setValue(image);
         child_db.child("title").setValue(title);
         child_db.child("price").setValue(price);
@@ -135,6 +137,7 @@ int checkProduct =0;
         Snackbar.make(coordinatorLayout,"Added to cart successfully",Snackbar.LENGTH_SHORT).show();
         //Toast.makeText(BuyProduct.this, title+" is added to cart successfully", Toast.LENGTH_SHORT).show();
         Log.d("##elseProductValueAfter", String.valueOf(SearchConstants.CheckProduct));
+
 
     }
     @Override
@@ -172,7 +175,7 @@ cartValue.setOnClickListener(new View.OnClickListener() {
                 firebaseAuth =FirebaseAuth.getInstance();
                 firebaseUser =firebaseAuth.getCurrentUser();
                 firebaseDatabase =FirebaseDatabase.getInstance();
-                databaseReference =firebaseDatabase.getReference(firebaseUser.getUid());
+                databaseReference =firebaseDatabase.getReference("cartValues").child(firebaseUser.getUid());
                 databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
