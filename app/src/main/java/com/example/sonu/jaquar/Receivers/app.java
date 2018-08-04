@@ -23,6 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 
 
 public class app extends Application {
+    String TAG ="app";
     AlarmManager alarmManager;
     FirebaseDatabase firebaseDatabase;
     DatabaseReference db;
@@ -32,23 +33,24 @@ public class app extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Log.e(TAG,"onncreate");
         handler = new Handler();
         runnable = new Runnable() {
             @Override
             public void run() {
                 Intent intent = new Intent(getApplicationContext(), NotificationBroadcaster.class);
-                PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 101, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 101, intent,0);
                 AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
                 if (alarmManager != null) {
-                    alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 60*1000, AlarmManager.INTERVAL_HALF_HOUR, pendingIntent);
+                    Log.e(TAG,"AlarmManger not null");
+                   // alarmManager.set(AlarmManager.RTC_WAKEUP,System.currentTimeMillis()+60000,pendingIntent);
+                    alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 60*1000, AlarmManager.INTERVAL_FIFTEEN_MINUTES, pendingIntent);
 
                 }
             }
         };
-        handler.postDelayed(runnable,90000);
+        handler.postDelayed(runnable,20000);
     }
-
-
-
+    
     }
 

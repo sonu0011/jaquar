@@ -29,6 +29,7 @@
         android:layout_marginTop="10dp"
         android:hint="  Search..."
         android:padding="10dp"
+        android:inputType="text"
 
         android:layout_marginLeft="15dp"
         android:background="@drawable/searchbag"

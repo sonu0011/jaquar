@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +21,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.sonu.jaquar.Adapters.SIngleProductAdapter;
+import com.example.sonu.jaquar.Constants.CheckInternetCoonnection;
 import com.example.sonu.jaquar.Models.SearchModel;
 import com.example.sonu.jaquar.Models.SingelProductModel;
 import com.google.firebase.auth.FirebaseAuth;
@@ -40,23 +42,44 @@ import java.util.Map;
 import java.util.Objects;
 
 public class HomeSearch extends AppCompatActivity {
+    private static final String TAG = "HomeSearch";
     EditText searchEditText;
     List<SingelProductModel> list;
     RecyclerView searchrecycleview;
     SIngleProductAdapter sIngleProductAdapter;
     ProgressDialog progressDialog;
+    private AlertDialog.Builder mbuilder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_search);
+        boolean b = new CheckInternetCoonnection().CheckNetwork(HomeSearch.this);
+        if (!b) {
+            mbuilder = new AlertDialog.Builder(HomeSearch.this);
+            View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.internetconnectiondialog, null);
+            mbuilder.setView(view);
+            mbuilder.setCancelable(false);
+            mbuilder.create();
+            final AlertDialog alertDialog = mbuilder.show();
+
+            view.findViewById(R.id.cancel_internet).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    alertDialog.dismiss();
+                    finish();
+
+                }
+            });
+        }
         list =new ArrayList<>();
         progressDialog =new ProgressDialog(HomeSearch.this);
         searchrecycleview =findViewById(R.id.searchRecycleview);
         searchrecycleview.setHasFixedSize(true);
         searchrecycleview.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarHomeSearch);
-        toolbar.setTitle("jaquar.com");
+        toolbar.setTitle("Search For Products");
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
@@ -67,6 +90,8 @@ public class HomeSearch extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 onBackPressed();
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+
             }
         });
         searchEditText =findViewById(R.id.searchfromfirebase);
@@ -99,6 +124,31 @@ public class HomeSearch extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.d(TAG, "onRestart: ");
+        boolean b = new CheckInternetCoonnection().CheckNetwork(HomeSearch.this);
+        if (!b) {
+            mbuilder = new AlertDialog.Builder(HomeSearch.this);
+            View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.internetconnectiondialog, null);
+            mbuilder.setView(view);
+            mbuilder.setCancelable(false);
+            mbuilder.create();
+            final AlertDialog alertDialog = mbuilder.show();
+
+            view.findViewById(R.id.cancel_internet).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    alertDialog.dismiss();
+                    finish();
+
+                }
+            });
+        }
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -177,5 +227,11 @@ public class HomeSearch extends AppCompatActivity {
         sIngleProductAdapter =new SIngleProductAdapter(getApplicationContext(),list);
         searchrecycleview.setAdapter(sIngleProductAdapter);
        //progressDialog.dismiss();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
     }
 }

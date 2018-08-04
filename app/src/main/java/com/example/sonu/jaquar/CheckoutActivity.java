@@ -14,6 +14,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,6 +23,7 @@ import android.support.v7.widget.SearchView;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,6 +33,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.sonu.jaquar.Adapters.CheckOutAdapter;
+import com.example.sonu.jaquar.Constants.CheckInternetCoonnection;
 import com.example.sonu.jaquar.Constants.SearchConstants;
 import com.example.sonu.jaquar.Models.CheckOutMOdel;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -72,10 +75,31 @@ NotificationChannel               notificationChannel;
 Handler handler;
 Runnable runnable;
 ProgressDialog progressDialog;
+    private AlertDialog.Builder mbuilder;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checkout);
+        boolean b = new CheckInternetCoonnection().CheckNetwork(CheckoutActivity.this);
+        if (!b) {
+            mbuilder = new AlertDialog.Builder(CheckoutActivity.this);
+            View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.internetconnectiondialog, null);
+            mbuilder.setView(view);
+            mbuilder.setCancelable(false);
+            mbuilder.create();
+            final AlertDialog alertDialog = mbuilder.show();
+
+            view.findViewById(R.id.cancel_internet).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    alertDialog.dismiss();
+                    finish();
+
+                }
+            });
+        }
         Log.d(tag,"OnCreate");
         progressDialog =new ProgressDialog(CheckoutActivity.this);
         notificationManagerCompat =NotificationManagerCompat.from(getApplicationContext());
@@ -88,7 +112,7 @@ ProgressDialog progressDialog;
         //spinner =findViewById(R.id.checkoutQuantity);
         Log.d("whichMethod","onCreate");
         toolbar =findViewById(R.id.toolbarCheckout);
-        toolbar.setTitle("Jaquor.com");
+        toolbar.setTitle("Proceed to Checkout");
         toolbar.setTitleTextColor(Color.WHITE);
         toolbar.setBackgroundColor(getResources().getColor(R.color.toobarCOlor));
             setSupportActionBar(toolbar);
@@ -385,6 +409,25 @@ ProgressDialog progressDialog;
     @Override
     protected void onRestart() {
         super.onRestart();
+        boolean b = new CheckInternetCoonnection().CheckNetwork(CheckoutActivity.this);
+        if (!b) {
+            mbuilder = new AlertDialog.Builder(CheckoutActivity.this);
+            View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.internetconnectiondialog, null);
+            mbuilder.setView(view);
+            mbuilder.setCancelable(false);
+            mbuilder.create();
+            final AlertDialog alertDialog = mbuilder.show();
+
+            view.findViewById(R.id.cancel_internet).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    alertDialog.dismiss();
+                    finish();
+
+                }
+            });
+        }
         Log.d("whichMethod","onRestart");
 
     }

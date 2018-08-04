@@ -85,7 +85,7 @@ TextView tpriceValue;
         checkOutMOdel = list.get(position);
         Glide.with(context).load(checkOutMOdel.getimage()).placeholder(R.drawable.loader).dontAnimate().into(holder.imageView);
 
-        holder.price.setText(checkOutMOdel.gettotalpricequantity());
+        holder.price.setText(checkOutMOdel.gettotalpricequantity()+".00");
         holder.title.setText(checkOutMOdel.getTitle());
         holder.productcode.setText(checkOutMOdel.getProductcode());
         holder.countTextview.setText(checkOutMOdel.getQuantity());

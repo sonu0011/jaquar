@@ -43,7 +43,7 @@ return new ViewHolder(LayoutInflater.from(ctx).inflate(R.layout.newlyproductlayo
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final NewlyProductModel singelProductModel = list.get(position);
         Glide.with(ctx).load(singelProductModel.getImage()).placeholder(R.drawable.loader).into(holder.image);
-        holder.price.setText(singelProductModel.getPrice());
+        holder.price.setText(singelProductModel.getPrice()+".00");
         holder.title.setText(singelProductModel.getTitle());
         holder.productcode.setText(singelProductModel.getProductcode());
         holder.getData(position);

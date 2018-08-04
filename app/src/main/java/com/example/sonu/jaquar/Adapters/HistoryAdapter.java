@@ -48,7 +48,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.MyViewHo
     public void onBindViewHolder(@NonNull final MyViewHolder holder, int position) {
          final HistoryModel model = lst.get(position);
         Glide.with(ctx).load(model.getImage()).placeholder(R.drawable.loader).into(holder.image);
-        holder.price.setText(model.getTotalprice());
+        holder.price.setText(model.getTotalprice()+".00");
         holder.title.setText(model.getTitle());
         holder.productcode.setText(model.getProductcode());
         holder.quantity.setText(model.getQuantity());

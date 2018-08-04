@@ -4,10 +4,18 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Handler;
+import android.provider.Settings;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Toast;
+
+import com.example.sonu.jaquar.Constants.CheckInternetCoonnection;
 
 public class SplashActivity extends AppCompatActivity {
     Handler handler;
@@ -15,43 +23,143 @@ public class SplashActivity extends AppCompatActivity {
     ConnectivityManager connectivityManager;
     NetworkInfo networkInfo;
     CoordinatorLayout coordinatorLayout;
+    AlertDialog.Builder mbuilder;
+    public static final String TAG = "SplashActivity";
+
+    @Override
+    protected void onStart() {
+        Log.d(TAG, "onStart: ");
+        super.onStart();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        coordinatorLayout =findViewById(R.id.cordinatelayout_splash);
+        mbuilder = new AlertDialog.Builder(SplashActivity.this);
+
+        Log.d(TAG, "onCreate: ");
+        coordinatorLayout = findViewById(R.id.cordinatelayout_splash);
         connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
-        if(connectivityManager!=null)
-        {
-            networkInfo =connectivityManager.getActiveNetworkInfo();
-            if(networkInfo !=null && networkInfo.isConnected())
-            {
+        if (connectivityManager != null) {
+            networkInfo = connectivityManager.getActiveNetworkInfo();
+            if (networkInfo != null && networkInfo.isConnected()) {
+
+
                 handler = new Handler();
                 runnable = new Runnable() {
                     @Override
                     public void run() {
-                        startActivity(new Intent(SplashActivity.this,LoginActivity.class));
+                        startActivity(new Intent(SplashActivity.this, LoginActivity.class));
                         finish();
 
                     }
                 };
-                handler.postDelayed(runnable,2000);
-            }
-            else {
-                Snackbar.make(coordinatorLayout,"No Internet Connection",Snackbar.LENGTH_SHORT).show();
-                handler = new Handler();
-                runnable = new Runnable() {
-                    @Override
-                    public void run() {
-//                        startActivity(new Intent(SplashActivity.this,LoginActivity.class));
-                        finish();
+                handler.postDelayed(runnable, 2000);
+            } else {
+                boolean b = new CheckInternetCoonnection().CheckNetwork(SplashActivity.this);
+                if (!b) {
+                    View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.internetconnectiondialog, null);
+                    mbuilder.setView(view);
+                    mbuilder.setCancelable(false);
+                    mbuilder.create();
+                    final AlertDialog alertDialog = mbuilder.show();
 
-                    }
-                };
-                handler.postDelayed(runnable,1000);
-            }
+                    view.findViewById(R.id.cancel_internet).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            alertDialog.dismiss();
+                            finish();
+
+                        }
+                    });
+                    view.findViewById(R.id.interner_settings).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            startActivityForResult(new Intent(Settings.ACTION_WIRELESS_SETTINGS), 0);
+//                        Intent intent = new Intent(Intent.ACTION_MAIN);
+//                        intent.setClassName("com.android.phone", "com.android.phone.NetworkSetting");
+//                        startActivity(intent);
+                        }
+                    });
+                }
+
+//                Snackbar.make(coordinatorLayout,"No Internet Connection",Snackbar.LENGTH_SHORT).show();
+//                handler = new Handler();
+//                runnable = new Runnable() {
+//                    @Override
+//                    public void run() {
+////                        startActivity(new Intent(SplashActivity.this,LoginActivity.class));
+//                        finish();
+//
+//                    }
+//                };
+//                handler.postDelayed(runnable,1000);
             }
         }
 
+    }
+
+    @Override
+    protected void onResume() {
+        Log.d(TAG, "onResume: ");
+        super.onResume();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        coordinatorLayout = findViewById(R.id.cordinatelayout_splash);
+        connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+        if (connectivityManager != null) {
+            networkInfo = connectivityManager.getActiveNetworkInfo();
+            if (networkInfo != null && networkInfo.isConnected()) {
+
+
+                handler = new Handler();
+                runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        startActivity(new Intent(SplashActivity.this, LoginActivity.class));
+                        finish();
+
+                    }
+                };
+                handler.postDelayed(runnable, 2000);
+            } else {
+                boolean b = new CheckInternetCoonnection().CheckNetwork(SplashActivity.this);
+                if (!b) {
+                    View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.internetconnectiondialog, null);
+                    mbuilder.setView(view);
+                    mbuilder.setCancelable(false);
+                    mbuilder.create();
+                    final AlertDialog alertDialog = mbuilder.show();
+
+                    view.findViewById(R.id.cancel_internet).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            alertDialog.dismiss();
+                            finish();
+
+                        }
+                    });
+                    view.findViewById(R.id.interner_settings).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            startActivityForResult(new Intent(Settings.ACTION_WIRELESS_SETTINGS), 0);
+//                        Intent intent = new Intent(Intent.ACTION_MAIN);
+//                        intent.setClassName("com.android.phone", "com.android.phone.NetworkSetting");
+//                        startActivity(intent);
+                        }
+                    });
+                }
+
+                Log.d(TAG, "onRestart: ");
+
+            }
+
+        }
+    }
 }

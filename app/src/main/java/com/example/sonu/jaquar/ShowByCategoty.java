@@ -5,14 +5,17 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.provider.SyncStateContract;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,6 +27,7 @@ import android.widget.Toast;
 
 import com.example.sonu.jaquar.Adapters.NewlyProductAdapter;
 import com.example.sonu.jaquar.Adapters.RecyclerAdapter;
+import com.example.sonu.jaquar.Constants.CheckInternetCoonnection;
 import com.example.sonu.jaquar.Constants.SearchConstants;
 import com.example.sonu.jaquar.Models.CategoriesModel;
 import com.example.sonu.jaquar.Models.GetValue;
@@ -39,21 +43,42 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 public class ShowByCategoty extends AppCompatActivity  {
+    private static final String TAG ="ShowByCategory" ;
     RecyclerView recyclerView;
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
   ProgressDialog progressDialog;
     Toolbar toolbar;
+    private AlertDialog.Builder mbuilder;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_by_categoty);
+        boolean b = new CheckInternetCoonnection().CheckNetwork(ShowByCategoty.this);
+        if (!b) {
+            mbuilder = new AlertDialog.Builder(ShowByCategoty.this);
+            View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.internetconnectiondialog, null);
+            mbuilder.setView(view);
+            mbuilder.setCancelable(false);
+            mbuilder.create();
+            final AlertDialog alertDialog = mbuilder.show();
+
+            view.findViewById(R.id.cancel_internet).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    alertDialog.dismiss();
+                    finish();
+
+                }
+            });
+        }
         recyclerView = findViewById(R.id.recyclerview);
         recyclerView.setHasFixedSize(true);
         toolbar =findViewById(R.id.toolbarCategory);
-        toolbar.setTitle("Jaquar.com");
+        toolbar.setTitle("Shop By Category");
         toolbar.setTitleTextColor(Color.WHITE);
-
         toolbar.setBackgroundColor(getResources().getColor(R.color.toobarCOlor));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
@@ -61,6 +86,10 @@ public class ShowByCategoty extends AppCompatActivity  {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getApplicationContext(), 2);
         recyclerView.setLayoutManager(gridLayoutManager);
+        recyclerView.addItemDecoration(new DividerItemDecoration(ShowByCategoty.this,
+                DividerItemDecoration.HORIZONTAL));
+        recyclerView.addItemDecoration(new DividerItemDecoration(ShowByCategoty.this,
+                DividerItemDecoration.VERTICAL));
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -124,6 +153,30 @@ public class ShowByCategoty extends AppCompatActivity  {
 
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.d(TAG, "onRestart: ");
+        boolean b = new CheckInternetCoonnection().CheckNetwork(ShowByCategoty.this);
+        if (!b) {
+            mbuilder = new AlertDialog.Builder(ShowByCategoty.this);
+            View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.internetconnectiondialog, null);
+            mbuilder.setView(view);
+            mbuilder.setCancelable(false);
+            mbuilder.create();
+            final AlertDialog alertDialog = mbuilder.show();
+
+            view.findViewById(R.id.cancel_internet).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    alertDialog.dismiss();
+                    finish();
+
+                }
+            });
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

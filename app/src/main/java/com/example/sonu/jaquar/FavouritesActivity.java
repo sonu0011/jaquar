@@ -1,11 +1,14 @@
 package com.example.sonu.jaquar;
 
 import android.graphics.Color;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -13,6 +16,7 @@ import android.widget.Toast;
 import com.example.sonu.jaquar.Adapters.FavourateAdapter;
 import com.example.sonu.jaquar.Adapters.NewlyProductAdapter;
 import com.example.sonu.jaquar.Adapters.SIngleProductAdapter;
+import com.example.sonu.jaquar.Constants.CheckInternetCoonnection;
 import com.example.sonu.jaquar.Models.NewlyProductModel;
 import com.example.sonu.jaquar.Models.SingelProductModel;
 import com.google.firebase.auth.FirebaseAuth;
@@ -25,15 +29,37 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FavouritesActivity extends AppCompatActivity {
-RecyclerView recyclerView;
+    private static final String TAG ="FavoritesActivity" ;
+    RecyclerView recyclerView;
 List<NewlyProductModel>list;
  Toolbar toolbar;
  ImageView imageView ;
 FavourateAdapter favourateAdapter;
+    private AlertDialog.Builder mbuilder;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favourites);
+        boolean b = new CheckInternetCoonnection().CheckNetwork(FavouritesActivity.this);
+        if (!b) {
+            mbuilder = new AlertDialog.Builder(FavouritesActivity.this);
+            View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.internetconnectiondialog, null);
+            mbuilder.setView(view);
+            mbuilder.setCancelable(false);
+            mbuilder.create();
+            final AlertDialog alertDialog = mbuilder.show();
+
+            view.findViewById(R.id.cancel_internet).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    alertDialog.dismiss();
+                    finish();
+
+                }
+            });
+        }
         imageView =findViewById(R.id.nowhishlistimage);
         toolbar =findViewById(R.id.favtoolbar);
         toolbar.setTitle("Favourites");
@@ -84,5 +110,30 @@ FavourateAdapter favourateAdapter;
 
                     }
                 });
+    }
+
+    @Override
+    protected void onRestart() {
+        Log.d(TAG, "onRestart: ");
+        boolean b = new CheckInternetCoonnection().CheckNetwork(FavouritesActivity.this);
+        if (!b) {
+            mbuilder = new AlertDialog.Builder(FavouritesActivity.this);
+            View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.internetconnectiondialog, null);
+            mbuilder.setView(view);
+            mbuilder.setCancelable(false);
+            mbuilder.create();
+            final AlertDialog alertDialog = mbuilder.show();
+
+            view.findViewById(R.id.cancel_internet).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    alertDialog.dismiss();
+                    finish();
+
+                }
+            });
+        }
+        super.onRestart();
     }
 }

@@ -6,14 +6,18 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
+import android.os.Build;
 import android.provider.ContactsContract;
 import android.provider.SyncStateContract;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -23,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.sonu.jaquar.Constants.CheckInternetCoonnection;
 import com.example.sonu.jaquar.Constants.SearchConstants;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -33,7 +38,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class BuyProduct extends AppCompatActivity {
-ImageView buyImageView;
+    private static final String TAG ="BuyProduct" ;
+    ImageView buyImageView;
 Toolbar toolbar;
 TextView buyTitle,buyPrice,buyProductcode,cartValue;
 Button addtocart,buynow;
@@ -47,71 +53,92 @@ SQLiteDatabase sqLiteDatabase;
 int checkProduct =0;
     String image,price,title,productcode;
     CoordinatorLayout coordinatorLayout;
+    private AlertDialog.Builder mbuilder;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buy_product);
-        cartValue =findViewById(R.id.cartValue);
-        coordinatorLayout =findViewById(R.id.adtocartCordinaterlayout);
-        firebaseDatabase =FirebaseDatabase.getInstance();
-        firebaseAuth =FirebaseAuth.getInstance();
-        firebaseUser =firebaseAuth.getCurrentUser();
-        databaseReference =firebaseDatabase.getReference();
-        buyImageView =findViewById(R.id.buyProductImage);
-        toolbar =findViewById(R.id.buyProductToolbar);
-        buyTitle =findViewById(R.id.buyProductTitle);
-        buyPrice =findViewById(R.id.buyProductGetProductPrice);
-        buyProductcode =findViewById(R.id.buyProductGetProductCode);
-        addtocart =findViewById(R.id.buyProductAddtocartBtn);
-        buynow =findViewById(R.id.buyProductBuyNowBtn);
-        image = getIntent().getStringExtra("image");
-        title = getIntent().getStringExtra("title");
-        price = getIntent().getStringExtra("price");
-        firebaseAuth =FirebaseAuth.getInstance();
-        firebaseUser =firebaseAuth.getCurrentUser();
-        firebaseDatabase =FirebaseDatabase.getInstance();
-        databaseReference =firebaseDatabase.getReference("cartValues").child(firebaseUser.getUid());
-        productcode = getIntent().getStringExtra("productcode");
-        toolbar.setTitle("Continue Shopping...");
-        toolbar.setTitleTextColor(Color.CYAN);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        toolbar.setBackgroundColor(getResources().getColor(R.color.toobarCOlor));
-        //toolbar.inflateMenu(R.menu.shoppingcart);
-        if(image!=null && title!=null && price!=null && productcode!=null)
-        {
-            Log.d("IntentValuesAre",image+"  "+title+"  "+price+"  "+buyProductcode);
-            Glide.with(BuyProduct.this).load(image).placeholder(R.drawable.loader).into(buyImageView);
-            buyTitle.setText(title);
-            buyPrice.setText(price);
-            buyProductcode.setText(productcode);
+        boolean b = new CheckInternetCoonnection().CheckNetwork(BuyProduct.this);
+        if (!b) {
+            mbuilder = new AlertDialog.Builder(BuyProduct.this);
+            View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.internetconnectiondialog, null);
+            mbuilder.setView(view);
+            mbuilder.setCancelable(false);
+            mbuilder.create();
+            final AlertDialog alertDialog = mbuilder.show();
+
+            view.findViewById(R.id.cancel_internet).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    alertDialog.dismiss();
+                    finish();
+
+                }
+            });
+        } else {
+
+
+            cartValue = findViewById(R.id.cartValue);
+            coordinatorLayout = findViewById(R.id.adtocartCordinaterlayout);
+            firebaseDatabase = FirebaseDatabase.getInstance();
+            firebaseAuth = FirebaseAuth.getInstance();
+            firebaseUser = firebaseAuth.getCurrentUser();
+            databaseReference = firebaseDatabase.getReference();
+            buyImageView = findViewById(R.id.buyProductImage);
+            toolbar = findViewById(R.id.buyProductToolbar);
+            buyTitle = findViewById(R.id.buyProductTitle);
+            buyPrice = findViewById(R.id.buyProductGetProductPrice);
+            buyProductcode = findViewById(R.id.buyProductGetProductCode);
+            addtocart = findViewById(R.id.buyProductAddtocartBtn);
+            buynow = findViewById(R.id.buyProductBuyNowBtn);
+            image = getIntent().getStringExtra("image");
+            title = getIntent().getStringExtra("title");
+            price = getIntent().getStringExtra("price");
+            firebaseAuth = FirebaseAuth.getInstance();
+            firebaseUser = firebaseAuth.getCurrentUser();
+            firebaseDatabase = FirebaseDatabase.getInstance();
+            databaseReference = firebaseDatabase.getReference("cartValues").child(firebaseUser.getUid());
+            productcode = getIntent().getStringExtra("productcode");
+            toolbar.setTitle("Add to Cart ");
+            toolbar.setTitleTextColor(Color.WHITE);
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            toolbar.setBackgroundColor(getResources().getColor(R.color.toobarCOlor));
+            //toolbar.inflateMenu(R.menu.shoppingcart);
+            if (image != null && title != null && price != null && productcode != null) {
+                Log.d("IntentValuesAre", image + "  " + title + "  " + price + "  " + buyProductcode);
+                Glide.with(BuyProduct.this).load(image).placeholder(R.drawable.loader).into(buyImageView);
+                buyTitle.setText(title);
+                buyPrice.setText(price + ".00");
+                buyProductcode.setText(productcode);
+            }
+            cartValue.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (SearchConstants.Productcount > 0) {
+                        startActivity(new Intent(BuyProduct.this, CheckoutActivity.class));
+                    } else {
+                        Toast.makeText(BuyProduct.this, "Cart is Empty!!!", Toast.LENGTH_SHORT).show();
+
+                    }
+                }
+            });
+            buynow.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (SearchConstants.Productcount > 0) {
+                        startActivity(new Intent(BuyProduct.this, CheckoutActivity.class));
+                    } else {
+                        Toast.makeText(BuyProduct.this, "Cart is Empty!!!", Toast.LENGTH_SHORT).show();
+
+                    }
+
+                }
+            });
         }
-        cartValue.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (SearchConstants.Productcount > 0) {
-                    startActivity(new Intent(BuyProduct.this, CheckoutActivity.class));
-                }
-                else {
-                    Toast.makeText(BuyProduct.this, "Cart is Empty!!!", Toast.LENGTH_SHORT).show();
-
-                }
-            }
-        });
-        buynow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (SearchConstants.Productcount > 0) {
-                    startActivity(new Intent(BuyProduct.this, CheckoutActivity.class));
-                }
-                else {
-                    Toast.makeText(BuyProduct.this, "Cart is Empty!!!", Toast.LENGTH_SHORT).show();
-
-                }
-
-            }
-        });
     }
     @Override
     public boolean onSupportNavigateUp() {
@@ -143,73 +170,74 @@ int checkProduct =0;
     @Override
     protected void onStart() {
         super.onStart();
+        boolean b = new CheckInternetCoonnection().CheckNetwork(BuyProduct.this);
+        Log.d(TAG, "onStart: valued of boolean"+b);
+        if (!b) {
 
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-               long count =  dataSnapshot.getChildrenCount();
-               SearchConstants.Productcount = (int) count;
-               cartValue.setText(String.valueOf(SearchConstants.Productcount));
-               Log.d("TotalProducts", String.valueOf(SearchConstants.Productcount));
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-cartValue.setOnClickListener(new View.OnClickListener() {
-    @Override
-    public void onClick(View view) {
-        if (SearchConstants.Productcount > 0) {
-            startActivity(new Intent(BuyProduct.this, CheckoutActivity.class));
-        }
-        else {
-            Toast.makeText(BuyProduct.this, "Cart is Empty!!!", Toast.LENGTH_SHORT).show();
+            databaseReference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    long count = dataSnapshot.getChildrenCount();
+                    SearchConstants.Productcount = (int) count;
+                    cartValue.setText(String.valueOf(SearchConstants.Productcount));
+                    Log.d("TotalProducts", String.valueOf(SearchConstants.Productcount));
+                }
 
-        }
-    }
-});
-            }
-        });
-        addtocart.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    cartValue.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if (SearchConstants.Productcount > 0) {
+                                startActivity(new Intent(BuyProduct.this, CheckoutActivity.class));
+                            } else {
+                                Toast.makeText(BuyProduct.this, "Cart is Empty!!!", Toast.LENGTH_SHORT).show();
 
-            @Override
-            public void onClick(View view) {
-                firebaseAuth =FirebaseAuth.getInstance();
-                firebaseUser =firebaseAuth.getCurrentUser();
-                firebaseDatabase =FirebaseDatabase.getInstance();
-                databaseReference =firebaseDatabase.getReference("cartValues").child(firebaseUser.getUid());
-                databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        for(DataSnapshot ds:dataSnapshot.getChildren())
-                           {
-                                         Log.d("insideDataChange","yes");
-                            String titleValue =ds.child("productcode").getValue(String.class);
-                            if(productcode.equals(titleValue))
-                            {
-                                Log.d("Data Matched","yes");
-                                checkProduct=1;
-                                Log.d("CheckProductMatched", String.valueOf(checkProduct));
-                                Snackbar.make(coordinatorLayout,"Product is already in cart",Snackbar.LENGTH_SHORT).show();
                             }
                         }
-                        if(checkProduct==0)
-                        {
-                            Log.d("insideCheckProduct", String.valueOf(checkProduct));
-                            addToCart();
+                    });
+                }
+            });
+            addtocart.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View view) {
+                    firebaseAuth = FirebaseAuth.getInstance();
+                    firebaseUser = firebaseAuth.getCurrentUser();
+                    firebaseDatabase = FirebaseDatabase.getInstance();
+                    databaseReference = firebaseDatabase.getReference("cartValues").child(firebaseUser.getUid());
+                    databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                                Log.d("insideDataChange", "yes");
+                                String titleValue = ds.child("productcode").getValue(String.class);
+                                if (productcode.equals(titleValue)) {
+                                    Log.d("Data Matched", "yes");
+                                    checkProduct = 1;
+                                    Log.d("CheckProductMatched", String.valueOf(checkProduct));
+                                    Snackbar.make(coordinatorLayout, "Product is already in cart", Snackbar.LENGTH_SHORT).show();
+                                }
+                            }
+                            if (checkProduct == 0) {
+                                Log.d("insideCheckProduct", String.valueOf(checkProduct));
+                                addToCart();
+                            }
+
                         }
 
-                    }
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
+                        }
+                    });
 
-                    }
-                });
-
-             }
+                }
 
 
-        });
+            });
 
+        }
     }
 
     @Override
@@ -228,6 +256,25 @@ cartValue.setOnClickListener(new View.OnClickListener() {
     @Override
     protected void onRestart() {
         super.onRestart();
+        boolean b = new CheckInternetCoonnection().CheckNetwork(BuyProduct.this);
+        if (!b) {
+            mbuilder = new AlertDialog.Builder(BuyProduct.this);
+            View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.internetconnectiondialog, null);
+            mbuilder.setView(view);
+            mbuilder.setCancelable(false);
+            mbuilder.create();
+            final AlertDialog alertDialog = mbuilder.show();
+
+            view.findViewById(R.id.cancel_internet).setOnClickListener(new View.OnClickListener() {
+                @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+                @Override
+                public void onClick(View view) {
+
+                    alertDialog.dismiss();
+
+                }
+            });
+        }
         checkProduct=0;
     }
 }

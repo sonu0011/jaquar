@@ -1,18 +1,21 @@
 package com.example.sonu.jaquar;
 
 import android.graphics.Color;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.sonu.jaquar.Adapters.FavourateAdapter;
 import com.example.sonu.jaquar.Adapters.HistoryAdapter;
+import com.example.sonu.jaquar.Constants.CheckInternetCoonnection;
 import com.example.sonu.jaquar.Models.HistoryModel;
 import com.example.sonu.jaquar.Models.NewlyProductModel;
 import com.google.firebase.auth.FirebaseAuth;
@@ -25,16 +28,37 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OrdersHistory extends AppCompatActivity {
+    private static final String TAG = "OrderHistory";
     Toolbar toolbar;
     RecyclerView recyclerView;
     List<HistoryModel> list;
     HistoryAdapter historyAdapter;
     ImageView imageView;
+    private AlertDialog.Builder mbuilder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_orders_history);
+        boolean b = new CheckInternetCoonnection().CheckNetwork(OrdersHistory.this);
+        if (!b) {
+            mbuilder = new AlertDialog.Builder(OrdersHistory.this);
+            View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.internetconnectiondialog, null);
+            mbuilder.setView(view);
+            mbuilder.setCancelable(false);
+            mbuilder.create();
+            final AlertDialog alertDialog = mbuilder.show();
+
+            view.findViewById(R.id.cancel_internet).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    alertDialog.dismiss();
+                    finish();
+
+                }
+            });
+        }
         imageView =findViewById(R.id.noorderhistory);
         toolbar = findViewById(R.id.historytoolbar);
         toolbar.setTitle("Your Orders");
@@ -84,5 +108,30 @@ public class OrdersHistory extends AppCompatActivity {
                     }
                 });
 //
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.d(TAG, "onRestart: ");
+        boolean b = new CheckInternetCoonnection().CheckNetwork(OrdersHistory.this);
+        if (!b) {
+            mbuilder = new AlertDialog.Builder(OrdersHistory.this);
+            View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.internetconnectiondialog, null);
+            mbuilder.setView(view);
+            mbuilder.setCancelable(false);
+            mbuilder.create();
+            final AlertDialog alertDialog = mbuilder.show();
+
+            view.findViewById(R.id.cancel_internet).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    alertDialog.dismiss();
+                    finish();
+
+                }
+            });
+        }
     }
 }

@@ -41,11 +41,11 @@ public class NotificationBroadcaster extends BroadcastReceiver {
         DatabaseReference databaseReference;
     @Override
     public void onReceive(final Context context, Intent intent) {
-        Log.d("NotifiacationONRecice","yes");
+        Log.e("NotifiacationONRecice","yes");
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
         firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference(firebaseUser.getUid());
+        databaseReference = firebaseDatabase.getReference("cartValues").child(firebaseUser.getUid());
         notificationManagerCompat = NotificationManagerCompat.from(context);
         notificationManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -53,21 +53,19 @@ public class NotificationBroadcaster extends BroadcastReceiver {
             notificationChannel.setDescription("notificatioonChannel");
             notificationManager.createNotificationChannel(notificationChannel);
         }
-
-
         Intent intent1 = new Intent(context, CheckoutActivity.class);
        intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
         final PendingIntent pendingIntent = PendingIntent.getActivity(context, 205, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
 
         if (firebaseUser != null) {
-            Log.d("FirebaseUserNull","no");
+            Log.e("FirebaseUserNull","no");
             databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if(dataSnapshot.getChildrenCount()>0)
                     {
-                        Log.d("childerncount","greaterthanZero");
-                        Log.d("NotificationShows","yes");
+                        Log.e("childerncount","greaterthanZero");
+                        Log.e("NotificationShows","yes");
                         Notification notification = new NotificationCompat.Builder(context, "n1")
                                 .setContentTitle("jaquar!!!")
                                 .setContentText("There is something in your cart. Would you like to complete your Purchase?")

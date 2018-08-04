@@ -1,5 +1,10 @@
 package com.example.sonu.jaquar;
+import android.app.Activity;
 import android.app.ProgressDialog;
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.content.ComponentName;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
@@ -10,7 +15,9 @@ import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.design.internal.NavigationMenuView;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
@@ -18,6 +25,7 @@ import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,7 +34,9 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MotionEvent;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -54,12 +64,14 @@ import com.example.sonu.jaquar.Adapters.PagerAdapter;
 import com.example.sonu.jaquar.Adapters.RecyclerAdapter;
 import com.example.sonu.jaquar.Adapters.SIngleProductAdapter;
 import com.example.sonu.jaquar.Adapters.SliderAdapter;
+import com.example.sonu.jaquar.Constants.CheckInternetCoonnection;
 import com.example.sonu.jaquar.Constants.SearchConstants;
 import com.example.sonu.jaquar.Models.HomeDataModel;
 import com.example.sonu.jaquar.Models.NewlyProductModel;
 import com.example.sonu.jaquar.Models.SingelProductModel;
 import com.example.sonu.jaquar.Models.SliderModel;
 import com.example.sonu.jaquar.Receivers.InternetReceiver;
+import com.example.sonu.jaquar.Receivers.MyjobSchduler;
 import com.example.sonu.jaquar.Service.CartService;
 import com.example.sonu.jaquar.slider.FragmentSlider;
 import com.example.sonu.jaquar.slider.SliderIndicator;
@@ -96,9 +108,10 @@ public class HomeActivity extends AppCompatActivity
     Button searchAnything;
     InternetReceiver internetReceiver;
     PagerAdapter pagerAdapter;
-    private Handler handler;
     private final int delay = 2000;
     private int page = 0;
+    Handler handler;
+    Runnable runnable;
     //    Runnable runnable = new Runnable() {
 //        public void run() {
 //            if (pagerAdapter.getCount() == page) {
@@ -129,14 +142,76 @@ public class HomeActivity extends AppCompatActivity
     private SliderPagerAdapter mAdapter;
     private SliderIndicator mIndicator;
     TextView newarrivals,gallery;
+
     private SliderView sliderView;
     private LinearLayout mLinearLayout;
     NavigationView navigationView;
-
+    private static final String TAG = "HomeActivity";
+    AlertDialog.Builder mbuilder;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate: ");
+        list =new ArrayList<>();
+        boolean b = new CheckInternetCoonnection().CheckNetwork(HomeActivity.this);
+        if (!b) {
+            mbuilder = new AlertDialog.Builder(HomeActivity.this);
+            View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.internetconnectiondialog, null);
+            mbuilder.setView(view);
+            mbuilder.setCancelable(false);
+            mbuilder.create();
+            final AlertDialog alertDialog = mbuilder.show();
+
+            view.findViewById(R.id.cancel_internet).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    alertDialog.dismiss();
+                    finish();
+
+                }
+            });
+            view.findViewById(R.id.interner_settings).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivityForResult(new Intent(Settings.ACTION_WIRELESS_SETTINGS), 0);
+//                        Intent intent = new Intent(Intent.ACTION_MAIN);
+//                        intent.setClassName("com.android.phone", "com.android.phone.NetworkSetting");
+//                        startActivity(intent);
+                }
+            });
+            return;
+        }
         setContentView(R.layout.activity_main);
+//        mbuilder =new AlertDialog.Builder(HomeActivity.this);
+//        View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.internetconnectiondialog,null);
+//        mbuilder.setView(view);
+//        mbuilder.setCancelable(false);
+//        mbuilder.create();
+//        final AlertDialog alertDialog =mbuilder.show();
+//        view.findViewById(R.id.cancel_internet).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Toast.makeText(HomeActivity.this, "fasdf", Toast.LENGTH_SHORT).show();
+//                alertDialog.dismiss();
+//
+//            }
+//        });
+//        view.findViewById(R.id.interner_settings).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                startActivityForResult(new Intent(Settings.ACTION_WIRELESS_SETTINGS), 0);
+//            }
+//        });
+//        view.findViewById(R.id.interner_settings).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(Intent.ACTION_MAIN);
+//                intent.setClassName("com.android.phone","com.android.phone.NetworkSetting");
+//                startActivity(intent);
+//            }
+//        });
+
        String delete = getIntent().getStringExtra("deleteitem");
        if (delete!=null){
            if (delete.equals("delete")){
@@ -144,11 +219,34 @@ public class HomeActivity extends AppCompatActivity
                ref.removeValue();
            }
        }
+//       handler =new Handler();
+//       runnable =new Runnable() {
+//           @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+//           @Override
+//           public void run() {
+//               Log.e(TAG, "run: ");
+//               ComponentName componentName =new ComponentName(getApplicationContext(), MyjobSchduler.class);
+//               JobInfo jobInfo =new JobInfo.Builder(121,componentName)
+//                       .setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED)
+//                       .setPersisted(true)
+//                       .setPeriodic(60*1000)
+//                       .build();
+//               JobScheduler jobScheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
+//                    int id = jobScheduler.schedule(jobInfo);
+//               if (id == JobScheduler.RESULT_SUCCESS) {
+//                   Log.e(TAG, "Job scheduled");
+//               } else {
+//                   Log.e(TAG, "Job scheduling failed");
+//               }
+//
+//           }
+//       };
+//       handler.postDelayed(runnable,10000);
 
 
-        sliderView = (SliderView) findViewById(R.id.sliderView);
-        mLinearLayout = (LinearLayout) findViewById(R.id.pagesContainer);
-        setupSlider();
+//        sliderView = (SliderView) findViewById(R.id.sliderView);
+       // mLinearLayout = (LinearLayout) findViewById(R.id.pagesContainer);
+//        setupSlider();
 //       startService(new Intent(HomeActivity.this,CartService.class));
         searchAnything = findViewById(R.id.searchAnyThing);
         searchAnything.setOnClickListener(new View.OnClickListener() {
@@ -156,6 +254,10 @@ public class HomeActivity extends AppCompatActivity
             public void onClick(View view) {
 
                 startActivity(new Intent(HomeActivity.this, HomeSearch.class));
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                //enter animation
+                //exit animation
+
 //             overridePendingTransition(R.anim.right_in,R.anim.left_out);
 
             }
@@ -184,7 +286,6 @@ public class HomeActivity extends AppCompatActivity
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
             }
         });
         toolbar = findViewById(R.id.toolbar);
@@ -297,13 +398,19 @@ public class HomeActivity extends AppCompatActivity
 
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        Toast.makeText(this, "onTOuchEvent", Toast.LENGTH_SHORT).show();
+        return super.onTouchEvent(event);
+    }
+
     private void setupSlider() {
         sliderView.setDurationScroll(800);
         List<Fragment> fragments = new ArrayList<>();
         fragments.add(FragmentSlider.newInstance("https://firebasestorage.googleapis.com/v0/b/jaquarapp.appspot.com/o/sliderImages%2Fimage1.jpeg?alt=media&token=6e3b3294-31cb-4451-8aab-8e1cec23a376","Opal Prime"));
         fragments.add(FragmentSlider.newInstance("https://firebasestorage.googleapis.com/v0/b/jaquarapp.appspot.com/o/sliderImages%2Fimage2.jpeg?alt=media&token=59a85e17-0e9e-457f-977b-626aec4d7c95","Kubix Prime"));
         fragments.add(FragmentSlider.newInstance("https://firebasestorage.googleapis.com/v0/b/jaquarapp.appspot.com/o/sliderImages%2Fimage3.jpeg?alt=media&token=8c251b56-c94e-4516-a607-0d6ce6d20a72"," Single Lever Wall Mixer"));
-        mAdapter = new SliderPagerAdapter(getSupportFragmentManager(), fragments);
+        //mAdapter = new SliderPagerAdapter(getSupportFragmentManager(), fragments);
         sliderView.setAdapter(mAdapter);
         mIndicator = new SliderIndicator(this, mLinearLayout, sliderView, R.drawable.indicator_circle);
         mIndicator.setPageCount(fragments.size());
@@ -313,50 +420,52 @@ public class HomeActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
-        progressDialog = new ProgressDialog(HomeActivity.this);
-        progressDialog.setMessage("Loading");
-        progressDialog.setMessage("Please wait...");
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.show();
-        //   setTextValue();
-        Log.d("@@@@OnStart", "yes");
-        firebaseDatabase1 = FirebaseDatabase.getInstance();
-        databaseReference1 = firebaseDatabase1.getReference("NewlyProducts");
-        databaseReference1.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                list.clear();
-                for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    Log.d("checkData", ds.toString());
-                    String image = ds.child("image").getValue(String.class);
-                    String price = ds.child("price").getValue(String.class);
-                    String productcode = ds.child("productcode").getValue(String.class);
-                    String title = ds.child("title").getValue(String.class);
-                    String sliderImage = ds.child("sliderimage").getValue(String.class);
-                    String slidertitel = ds.child("slidertitle").getValue(String.class);
-                    if (image != null && price != null && productcode != null && title != null) {
-                        Log.d("ppp", image + " " + price + " " + productcode + " " + title);
-                        homeDataModel = new HomeDataModel(title, image, price, productcode, sliderImage, slidertitel);
-                        list.add(homeDataModel);
-                        Log.d("listSizeinside", String.valueOf(list.size()));
-                        Log.e("end", String.valueOf(list.size()));
-                        homeAdapter = new HomeAdapter(list, HomeActivity.this);
-                        NewProductRecycleView.setAdapter(homeAdapter);
+        Log.d(TAG, "onStart: ");
+        boolean b = new CheckInternetCoonnection().CheckNetwork(HomeActivity.this);
+        if (b) {
+            progressDialog = new ProgressDialog(HomeActivity.this);
+            progressDialog.setMessage("Loading");
+            progressDialog.setMessage("Please wait...");
+            progressDialog.setCanceledOnTouchOutside(false);
+            progressDialog.show();
+            //   setTextValue();
+            Log.d("@@@@OnStart", "yes");
+            firebaseDatabase1 = FirebaseDatabase.getInstance();
+            databaseReference1 = firebaseDatabase1.getReference("NewlyProducts");
+            databaseReference1.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    list.clear();
+                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                        Log.d("checkData", ds.toString());
+                        String image = ds.child("image").getValue(String.class);
+                        String price = ds.child("price").getValue(String.class);
+                        String productcode = ds.child("productcode").getValue(String.class);
+                        String title = ds.child("title").getValue(String.class);
+                        String sliderImage = ds.child("sliderimage").getValue(String.class);
+                        String slidertitel = ds.child("slidertitle").getValue(String.class);
+                        if (image != null && price != null && productcode != null && title != null) {
+                            Log.d("ppp", image + " " + price + " " + productcode + " " + title);
+                            homeDataModel = new HomeDataModel(title, image, price, productcode, sliderImage, slidertitel);
+                            list.add(homeDataModel);
+                            Log.d("listSizeinside", String.valueOf(list.size()));
+                            Log.e("end", String.valueOf(list.size()));
+                            homeAdapter = new HomeAdapter(list, HomeActivity.this);
+                            NewProductRecycleView.setAdapter(homeAdapter);
+                        }
+                        progressDialog.dismiss();
                     }
-                    progressDialog.dismiss();
+
+                    Log.d("arraylistSize", String.valueOf(list.size()));
+
                 }
 
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-                Log.d("arraylistSize", String.valueOf(list.size()));
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+                }
+            });
+        }
     }
 
     private void setTextValue() {
@@ -422,12 +531,13 @@ public class HomeActivity extends AppCompatActivity
 
         }
         if (id == R.id.nav_logout) {
-            FirebaseAuth.getInstance().signOut();
 
-            Intent i = new Intent(HomeActivity.this, LoginActivity.class);
-            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(i);
-            finish();
+                            FirebaseAuth.getInstance().signOut();
+
+                            Intent i = new Intent(HomeActivity.this, LoginActivity.class);
+                            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(i);
+                            finish();
 
         }
         if (id == R.id.nav_share) {
@@ -453,15 +563,61 @@ public class HomeActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
+        Log.d(TAG, "onResume: ");
     }
+
+    @Override
+    protected void onPause() {
+        Log.d(TAG, "onPause: ");
+        super.onPause();
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        Log.d(TAG, "onDestroy: ");
         if (internetReceiver != null) {
             unregisterReceiver(internetReceiver);
         }
         SearchConstants.Productcount = 0;
 
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.d(TAG, "onRestart: ");
+        boolean b = new CheckInternetCoonnection().CheckNetwork(HomeActivity.this);
+        if (!b) {
+            mbuilder = new AlertDialog.Builder(HomeActivity.this);
+            View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.internetconnectiondialog, null);
+            mbuilder.setView(view);
+            mbuilder.setCancelable(false);
+            mbuilder.create();
+            final AlertDialog alertDialog = mbuilder.show();
+
+
+
+            view.findViewById(R.id.cancel_internet).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    alertDialog.dismiss();
+                    finish();
+
+                }
+            });
+            view.findViewById(R.id.interner_settings).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivityForResult(new Intent(Settings.ACTION_WIRELESS_SETTINGS), 0);
+//                        Intent intent = new Intent(Intent.ACTION_MAIN);
+//                        intent.setClassName("com.android.phone", "com.android.phone.NetworkSetting");
+//                        startActivity(intent);
+                }
+            });
+
+        }
     }
 }
 

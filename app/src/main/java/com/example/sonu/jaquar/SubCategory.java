@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,6 +14,7 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +23,7 @@ import android.widget.Toast;
 
 import com.example.sonu.jaquar.Adapters.SIngleProductAdapter;
 import com.example.sonu.jaquar.Adapters.SubAccessoriesAdapter;
+import com.example.sonu.jaquar.Constants.CheckInternetCoonnection;
 import com.example.sonu.jaquar.Models.SingelProductModel;
 import com.example.sonu.jaquar.Models.SubAccessoriesModel;
 import com.google.firebase.auth.FirebaseAuth;
@@ -51,13 +54,34 @@ SIngleProductAdapter sIngleProductAdapter;
 SubAccessoriesAdapter subAccessoriesAdapter;
 Toolbar toolbar;
 ProgressDialog progressDialog;
+    private AlertDialog.Builder mbuilder;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sub_category);
+        boolean b = new CheckInternetCoonnection().CheckNetwork(SubCategory.this);
+        if (!b) {
+            mbuilder = new AlertDialog.Builder(SubCategory.this);
+            View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.internetconnectiondialog, null);
+            mbuilder.setView(view);
+            mbuilder.setCancelable(false);
+            mbuilder.create();
+            final AlertDialog alertDialog = mbuilder.show();
+
+            view.findViewById(R.id.cancel_internet).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    alertDialog.dismiss();
+                    finish();
+
+                }
+            });
+        }
         coordinatorLayout =findViewById(R.id.cordinatesub);
         toolbar =findViewById(R.id.toolbarSubCategory);
-        toolbar.setTitle("Jaquar.com");
+        toolbar.setTitle("Sub Category");
         toolbar.setTitleTextColor(Color.WHITE);
         toolbar.setBackgroundColor(getResources().getColor(R.color.toobarCOlor));
         setSupportActionBar(toolbar);getSupportActionBar().setDisplayShowTitleEnabled(true);
@@ -82,6 +106,25 @@ ProgressDialog progressDialog;
     @Override
     protected void onRestart() {
         super.onRestart();
+        boolean b = new CheckInternetCoonnection().CheckNetwork(SubCategory.this);
+        if (!b) {
+            mbuilder = new AlertDialog.Builder(SubCategory.this);
+            View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.internetconnectiondialog, null);
+            mbuilder.setView(view);
+            mbuilder.setCancelable(false);
+            mbuilder.create();
+            final AlertDialog alertDialog = mbuilder.show();
+
+            view.findViewById(R.id.cancel_internet).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    alertDialog.dismiss();
+                    finish();
+
+                }
+            });
+        }
         Log.d("SubCategoty","onRestart");
         listSingleProduct.clear();
     }

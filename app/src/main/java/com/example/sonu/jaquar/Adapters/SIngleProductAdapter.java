@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.sonu.jaquar.BuyProduct;
+import com.example.sonu.jaquar.Constants.AnimUtill;
 import com.example.sonu.jaquar.Interfaces.MyRecyclerClickListner;
 import com.example.sonu.jaquar.Models.SingelProductModel;
 import com.example.sonu.jaquar.R;
@@ -42,6 +43,7 @@ import java.util.Objects;
  */
 
 public class SIngleProductAdapter extends RecyclerView.Adapter<SIngleProductAdapter.ViewHolder> {
+    int previousPosition=0;
     int i=0;
     Context context;
     List<SingelProductModel> list;
@@ -94,9 +96,23 @@ public class SIngleProductAdapter extends RecyclerView.Adapter<SIngleProductAdap
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final SingelProductModel singelProductModel = list.get(position);
         Glide.with(context).load(singelProductModel.getImage()).placeholder(R.drawable.loader).into(holder.image);
-         holder.price.setText(singelProductModel.getPrice());
+         holder.price.setText(singelProductModel.getPrice()+".00");
         holder.title.setText(singelProductModel.getTitle());
         holder.productcode.setText(singelProductModel.getProductcode());
+
+//        if(position > previousPosition){ // We are scrolling DOWN
+//
+//          AnimUtill.animate(holder, true);
+//
+//        }else{ // We are scrolling UP
+//
+//            AnimUtill.animate(holder, false);
+//
+//
+//        }
+//
+//        previousPosition = position;
+
 
 //        int color = Color.parseColor("#AE6118"); //The color u want
 //        holder.image.setColorFilter(color);

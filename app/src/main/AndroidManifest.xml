@@ -6,6 +6,8 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
     <application
         android:name=".Receivers.app"
         android:allowBackup="true"
@@ -73,7 +75,9 @@
             android:name=".Service.CartService"
             android:enabled="true"
             android:exported="true" />
-
+        <service
+            android:name=".Receivers.MyjobSchduler"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
         <activity
             android:name=".HomeSearch"
             android:label="@string/title_activity_home_search"

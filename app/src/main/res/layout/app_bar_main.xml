@@ -29,14 +29,14 @@
                 android:fontFamily="@font/dark"/>
             <TextView
                 android:layout_marginTop="3dp"
-                android:paddingTop="2dp"
+                android:paddingTop="4dp"
                 android:layout_centerHorizontal="true"
                 android:textAlignment="center"
                 android:background="@drawable/ic_shopping_cart_black_24dp"
                 android:id="@+id/cartValueHome"
                 android:fontFamily="@font/dark"
-                android:textColor="#2bd725"
-                android:textSize="15sp"
+                android:textColor="#3739c1"
+                android:textSize="12sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="9dp"
@@ -74,7 +74,7 @@
           android:layout_toRightOf="@+id/searchByCategotyBtn"
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
-           android:hint="Search what you want.."
+           android:hint="Search For Products.."
            android:textColorHint="#59b13f"
            android:background="#b4ffffff"
            android:layout_toEndOf="@+id/searchByCategotyBtn" />

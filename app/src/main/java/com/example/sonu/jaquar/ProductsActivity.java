@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,12 +12,14 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
 import com.example.sonu.jaquar.Adapters.SIngleProductAdapter;
+import com.example.sonu.jaquar.Constants.CheckInternetCoonnection;
 import com.example.sonu.jaquar.Constants.SearchConstants;
 import com.example.sonu.jaquar.Models.SingelProductModel;
 import com.example.sonu.jaquar.Models.SubAccessoriesModel;
@@ -32,7 +35,8 @@ import java.util.HashMap;
 import java.util.List;
 
 public class ProductsActivity extends AppCompatActivity {
-String categoryname,subcategory;
+    private static final String TAG ="ProductsActivity" ;
+    String categoryname,subcategory;
 Toolbar toolbar;
 RecyclerView recyclerView;
 FirebaseDatabase firebaseDatabase;
@@ -42,10 +46,31 @@ SIngleProductAdapter sIngleProductAdapter;
 SingelProductModel singelProductModel;
 ProgressDialog progressDialog;
 CoordinatorLayout coordinatorLayout;
+    private AlertDialog.Builder mbuilder;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_products);
+        boolean b = new CheckInternetCoonnection().CheckNetwork(ProductsActivity.this);
+        if (!b) {
+            mbuilder = new AlertDialog.Builder(ProductsActivity.this);
+            View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.internetconnectiondialog, null);
+            mbuilder.setView(view);
+            mbuilder.setCancelable(false);
+            mbuilder.create();
+            final AlertDialog alertDialog = mbuilder.show();
+
+            view.findViewById(R.id.cancel_internet).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    alertDialog.dismiss();
+                    finish();
+
+                }
+            });
+        }
         coordinatorLayout =findViewById(R.id.productsnackbar);
         categoryname = SearchConstants.CATEGOTY_NAME;
         subcategory =SearchConstants.SUBCATEGOTY_NAME;
@@ -64,7 +89,7 @@ CoordinatorLayout coordinatorLayout;
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         list =new ArrayList<>();
         toolbar =findViewById(R.id.productsToolbar);
-        toolbar.setTitle("Jaquar.com");
+        toolbar.setTitle("Products");
         toolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
@@ -190,6 +215,32 @@ CoordinatorLayout coordinatorLayout;
         });
 
         }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.d(TAG, "onRestart: ");
+        boolean b = new CheckInternetCoonnection().CheckNetwork(ProductsActivity.this);
+        if (!b) {
+            mbuilder = new AlertDialog.Builder(ProductsActivity.this);
+            View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.internetconnectiondialog, null);
+            mbuilder.setView(view);
+            mbuilder.setCancelable(false);
+            mbuilder.create();
+            final AlertDialog alertDialog = mbuilder.show();
+
+            view.findViewById(R.id.cancel_internet).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    alertDialog.dismiss();
+                    finish();
+
+                }
+            });
+        }
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
