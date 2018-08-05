@@ -11,13 +11,14 @@
         android:layout_height="wrap_content" />
 
     <ImageView
+
         android:id="@+id/buyProductImage"
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:layout_below="@+id/buyProductToolbar"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="15dp"
-        android:background="@drawable/rectangleshape"
+        android:background="@drawable/imgbg"
         android:scaleType="fitXY"
         android:src="@drawable/back1" />
 
@@ -139,12 +140,12 @@
         android:layout_marginLeft="5dp"
         android:layout_marginRight="17dp"
         android:background="@drawable/ic_shopping_cart_black_24dp"
-        android:paddingTop="2dp"
+        android:paddingTop="3dp"
         android:text="0"
         android:fontFamily="@font/custom_font"
         android:textAlignment="center"
-        android:textColor="#2bd725"
-        android:textSize="16dp"
+        android:textColor="#3739c1"
+        android:textSize="13sp"
         android:textStyle="bold"
 
         />

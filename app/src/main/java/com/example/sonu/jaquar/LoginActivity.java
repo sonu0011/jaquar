@@ -60,36 +60,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "onCreate: ");
         super.onCreate(savedInstanceState);
-
-        boolean b = new CheckInternetCoonnection().CheckNetwork(LoginActivity.this);
-        if (!b) {
-            mbuilder = new AlertDialog.Builder(LoginActivity.this);
-            View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.internetconnectiondialog, null);
-            mbuilder.setView(view);
-            mbuilder.setCancelable(false);
-            mbuilder.create();
-            final AlertDialog alertDialog = mbuilder.show();
-
-            view.findViewById(R.id.cancel_internet).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    alertDialog.dismiss();
-                    finish();
-
-                }
-            });
-            view.findViewById(R.id.interner_settings).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    startActivityForResult(new Intent(Settings.ACTION_WIRELESS_SETTINGS), 0);
-//                        Intent intent = new Intent(Intent.ACTION_MAIN);
-//                        intent.setClassName("com.android.phone", "com.android.phone.NetworkSetting");
-//                        startActivity(intent);
-                }
-            });
-            return;
-        }
         setContentView(R.layout.activity_login);
         if (FirebaseAuth.getInstance().getCurrentUser()!=null) {
             startActivity(new Intent(LoginActivity.this, HomeActivity.class));
@@ -268,34 +238,7 @@ public class LoginActivity extends AppCompatActivity {
 
         super.onRestart();
         Log.d(TAG, "onRestart: ");
-        boolean b = new CheckInternetCoonnection().CheckNetwork(LoginActivity.this);
-        if (!b) {
-            mbuilder = new AlertDialog.Builder(LoginActivity.this);
-            View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.internetconnectiondialog, null);
-            mbuilder.setView(view);
-            mbuilder.setCancelable(false);
-            mbuilder.create();
-            final AlertDialog alertDialog = mbuilder.show();
 
-            view.findViewById(R.id.cancel_internet).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    alertDialog.dismiss();
-                    finish();
-
-                }
-            });
-            view.findViewById(R.id.interner_settings).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    startActivityForResult(new Intent(Settings.ACTION_WIRELESS_SETTINGS), 0);
-//                        Intent intent = new Intent(Intent.ACTION_MAIN);
-//                        intent.setClassName("com.android.phone", "com.android.phone.NetworkSetting");
-//                        startActivity(intent);
-                }
-            });
-        }
 
     }
 }

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:background="@drawable/bordertop"
+
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_margin="10dp"
+        android:scaleType="fitXY"
+        android:id="@+id/notificationImageview"
+        android:src="@drawable/image1"/>
+    <TextView
+        android:fontFamily="@font/dark"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/notificationImageview"
+        android:layout_alignTop="@+id/notificationImageview"
+        android:text="Title Comes Here"
+        android:textSize="17sp"
+        android:textColor="#52609f"
+        android:id="@+id/notificationtitel"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/notificationtitel"
+        android:layout_toRightOf="@+id/notificationImageview"
+        android:text="@string/Rs"
+        android:layout_marginTop="2dp"
+        android:fontFamily="@font/custom_font"
+        android:textColor="#e0000000"
+        android:id="@+id/notificationpriceSymnol"
+        android:textSize="16dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/notificationpriceSymnol"
+        android:layout_alignTop="@+id/notificationpriceSymnol"
+        android:text="1200"
+        android:fontFamily="@font/custom_font"
+        android:id="@+id/notificationProductPrice"
+        android:textColor="#000"
+        android:textSize="16sp"
+        android:layout_marginLeft="1dp"/>
+    <TextView
+        android:fontFamily="@font/custom_font"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/notificationpriceSymnol"
+        android:text="Product Code"
+       android:textColor="#000"
+
+        android:id="@+id/notificationProductCode"
+        android:layout_toRightOf="@+id/notificationImageview"
+        android:layout_marginTop="5dp"
+        android:textSize="16sp"/>
+        <Button
+            android:layout_width="120dp"
+            android:layout_height="30dp"
+
+            android:layout_below="@+id/notificationProductCode"
+            android:layout_toRightOf="@+id/notificationImageview"
+            android:text="View Details"
+            android:textColor="#000"
+            android:id="@+id/notificationviewdetails"
+            android:padding="2dp"
+            android:fontFamily="@font/roboto"
+            android:layout_marginTop="8dp"
+           android:background="@drawable/border"/>
+</RelativeLayout>
+

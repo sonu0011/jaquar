@@ -24,6 +24,7 @@ public class SplashActivity extends AppCompatActivity {
     NetworkInfo networkInfo;
     CoordinatorLayout coordinatorLayout;
     AlertDialog.Builder mbuilder;
+    AlertDialog alertDialog;
     public static final String TAG = "SplashActivity";
 
     @Override
@@ -31,21 +32,19 @@ public class SplashActivity extends AppCompatActivity {
         Log.d(TAG, "onStart: ");
         super.onStart();
     }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash);
+
         mbuilder = new AlertDialog.Builder(SplashActivity.this);
 
         Log.d(TAG, "onCreate: ");
-        coordinatorLayout = findViewById(R.id.cordinatelayout_splash);
+
         connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
-        if (connectivityManager != null) {
+                if (connectivityManager != null) {
             networkInfo = connectivityManager.getActiveNetworkInfo();
             if (networkInfo != null && networkInfo.isConnected()) {
-
-
+                setContentView(R.layout.activity_splash);
                 handler = new Handler();
                 runnable = new Runnable() {
                     @Override
@@ -63,7 +62,7 @@ public class SplashActivity extends AppCompatActivity {
                     mbuilder.setView(view);
                     mbuilder.setCancelable(false);
                     mbuilder.create();
-                    final AlertDialog alertDialog = mbuilder.show();
+                    alertDialog = mbuilder.show();
 
                     view.findViewById(R.id.cancel_internet).setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -77,7 +76,7 @@ public class SplashActivity extends AppCompatActivity {
                     view.findViewById(R.id.interner_settings).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            startActivityForResult(new Intent(Settings.ACTION_WIRELESS_SETTINGS), 0);
+                            startActivityForResult(new Intent(Settings.ACTION_SETTINGS), 0);
 //                        Intent intent = new Intent(Intent.ACTION_MAIN);
 //                        intent.setClassName("com.android.phone", "com.android.phone.NetworkSetting");
 //                        startActivity(intent);
@@ -148,18 +147,15 @@ public class SplashActivity extends AppCompatActivity {
                     view.findViewById(R.id.interner_settings).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            startActivityForResult(new Intent(Settings.ACTION_WIRELESS_SETTINGS), 0);
+                            startActivityForResult(new Intent(Settings.ACTION_SETTINGS), 0);
 //                        Intent intent = new Intent(Intent.ACTION_MAIN);
 //                        intent.setClassName("com.android.phone", "com.android.phone.NetworkSetting");
 //                        startActivity(intent);
                         }
                     });
                 }
-
                 Log.d(TAG, "onRestart: ");
-
             }
-
         }
     }
 }

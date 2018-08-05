@@ -7,13 +7,17 @@
         <item name="android:textColorSecondary">#fff</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="android:textColorPrimary">#fff</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimaryDark">@color/colorPrimary</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="DialogTitleAppearance">@android:style/TextAppearance.Medium</item>
         <item name="DialogTitleText">Updating…</item>
         <item name="DialogSpotColor">@android:color/holo_orange_dark</item>
         <item name="DialogSpotCount">4</item>
         <item name="android:colorControlHighlight" tools:targetApi="lollipop">#ffff8800</item>
+    </style>
+    <style name="Dialog" parent="Theme.AppCompat.Dialog">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
     </style>
 
 

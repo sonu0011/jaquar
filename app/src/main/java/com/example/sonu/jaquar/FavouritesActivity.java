@@ -1,9 +1,12 @@
 package com.example.sonu.jaquar;
 
+import android.content.IntentFilter;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -19,6 +22,7 @@ import com.example.sonu.jaquar.Adapters.SIngleProductAdapter;
 import com.example.sonu.jaquar.Constants.CheckInternetCoonnection;
 import com.example.sonu.jaquar.Models.NewlyProductModel;
 import com.example.sonu.jaquar.Models.SingelProductModel;
+import com.example.sonu.jaquar.Receivers.InternetReceiver;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -36,30 +40,15 @@ List<NewlyProductModel>list;
  ImageView imageView ;
 FavourateAdapter favourateAdapter;
     private AlertDialog.Builder mbuilder;
+    private InternetReceiver internetReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favourites);
-        boolean b = new CheckInternetCoonnection().CheckNetwork(FavouritesActivity.this);
-        if (!b) {
-            mbuilder = new AlertDialog.Builder(FavouritesActivity.this);
-            View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.internetconnectiondialog, null);
-            mbuilder.setView(view);
-            mbuilder.setCancelable(false);
-            mbuilder.create();
-            final AlertDialog alertDialog = mbuilder.show();
-
-            view.findViewById(R.id.cancel_internet).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    alertDialog.dismiss();
-                    finish();
-
-                }
-            });
-        }
+        IntentFilter intentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        internetReceiver = new InternetReceiver();
+        registerReceiver(internetReceiver, intentFilter);
         imageView =findViewById(R.id.nowhishlistimage);
         toolbar =findViewById(R.id.favtoolbar);
         toolbar.setTitle("Favourites");
@@ -79,6 +68,8 @@ FavourateAdapter favourateAdapter;
         });
         recyclerView =findViewById(R.id.favouriterecycleview);
         recyclerView.setHasFixedSize(true);
+        recyclerView.addItemDecoration(new DividerItemDecoration(FavouritesActivity.this,
+                DividerItemDecoration.VERTICAL));
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         list =new ArrayList<>();
         FirebaseDatabase.getInstance().getReference("favourites").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
@@ -98,7 +89,7 @@ FavourateAdapter favourateAdapter;
 
                                 NewlyProductModel model = data.getValue(NewlyProductModel.class);
                                 list.add(model);
-                                favourateAdapter = new FavourateAdapter(list, getApplicationContext());
+                                favourateAdapter = new FavourateAdapter(list, FavouritesActivity.this);
                                 recyclerView.setAdapter(favourateAdapter);
 
                             }
@@ -115,25 +106,16 @@ FavourateAdapter favourateAdapter;
     @Override
     protected void onRestart() {
         Log.d(TAG, "onRestart: ");
-        boolean b = new CheckInternetCoonnection().CheckNetwork(FavouritesActivity.this);
-        if (!b) {
-            mbuilder = new AlertDialog.Builder(FavouritesActivity.this);
-            View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.internetconnectiondialog, null);
-            mbuilder.setView(view);
-            mbuilder.setCancelable(false);
-            mbuilder.create();
-            final AlertDialog alertDialog = mbuilder.show();
-
-            view.findViewById(R.id.cancel_internet).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    alertDialog.dismiss();
-                    finish();
-
-                }
-            });
-        }
         super.onRestart();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy: ");
+        if (internetReceiver != null) {
+            unregisterReceiver(internetReceiver);
+        }
+
     }
 }

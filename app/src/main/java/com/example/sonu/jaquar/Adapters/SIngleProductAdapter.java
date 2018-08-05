@@ -44,6 +44,7 @@ import java.util.Objects;
 
 public class SIngleProductAdapter extends RecyclerView.Adapter<SIngleProductAdapter.ViewHolder> {
     int previousPosition=0;
+    public static final String TAG ="SingleProdeuctApapter";
     int i=0;
     Context context;
     List<SingelProductModel> list;
@@ -59,13 +60,15 @@ public class SIngleProductAdapter extends RecyclerView.Adapter<SIngleProductAdap
         this.categoryname = categoryname;
         this.subcategory = subcategory;
         this.coordinatorLayout = coordinatorLayout;
+        Log.d(TAG, "SIngleProductAdapter: "+categoryname);
+        Log.d(TAG, "SIngleProductAdapter: "+subcategory);
     }
 
     public SIngleProductAdapter(Context context, List<SingelProductModel> list, String anothercat,CoordinatorLayout cl) {
         this.context = context;
         this.list = list;
         this.anothercat = anothercat;
-        Log.d("####an",anothercat);
+        Log.d("####an",anothercat+"sonu");
         this.coordinatorLayout =cl;
     }
 
@@ -74,7 +77,7 @@ public class SIngleProductAdapter extends RecyclerView.Adapter<SIngleProductAdap
         this.list = list;
         this.categoryname = categoryname;
         this.subcategory = subcategory;
-        Log.d("####cat",categoryname);
+        Log.d("####cat",categoryname+"sonu");
         Log.d("####sub",subcategory);
 
 
@@ -118,7 +121,7 @@ public class SIngleProductAdapter extends RecyclerView.Adapter<SIngleProductAdap
 //        holder.image.setColorFilter(color);
 if(singelProductModel.getWhishlist().equals("1"))
 {
-
+    Log.d(TAG, "onBindViewHolder: whishlist:1");
         int color = Color.parseColor("#FF0000"); //The color u want
         holder.wishlistimage.setColorFilter(color);
 
@@ -165,6 +168,7 @@ if(singelProductModel.getWhishlist().equals("1"))
             FirebaseAuth firebaseAuth;
             FirebaseUser firebaseUser;
             public void onClick(View view) {
+                Log.d(TAG, "onClick: ");
                 SingelProductModel singelProductModel = list.get(position);
                 final String title = singelProductModel.getTitle();
                 final String image = singelProductModel.getImage();
@@ -178,44 +182,31 @@ if(singelProductModel.getWhishlist().equals("1"))
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             for (DataSnapshot ds : dataSnapshot.child("Accessories ").child("SubAccessories").child("Accessories (For Disable-friendly Bathroom)").getChildren()) {
-                                {
-                                    String pcode = ds.child("productcode").getValue(String.class);
+                                {        String pcode = ds.child("productcode").getValue(String.class);
                                     String fav = ds.child("whishlist").getValue(String.class);
                                     if (pcode != null) {
                                         if (pcode.equals(productcodev)) {
                                             if (fav != null) {
                                                 if (fav.equals("0")) {
+                                                    i = 1;
                                                     Log.d("fav", "yes");
                                                     firebaseDatabase = FirebaseDatabase.getInstance();
                                                     databaseReference = firebaseDatabase.getReference();
-                                                    DatabaseReference databaseReference1 = databaseReference.child("favourites").child((FirebaseAuth.getInstance().getCurrentUser().getUid())).push();
+                                                    DatabaseReference databaseReference1 = databaseReference.child("favourites").child((FirebaseAuth.getInstance().getCurrentUser().getUid())).child(productcodev);
                                                     databaseReference1.child("title").setValue(title);
                                                     databaseReference1.child("image").setValue(image);
                                                     databaseReference1.child("price").setValue(price);
                                                     databaseReference1.child("productcode").setValue(productcodev);
-                                                    int color = Color.parseColor("#FF0000"); //The color u want
+                                                    int color = Color.parseColor("#FF0000");
                                                     wishlistimage.setColorFilter(color);
                                                     ds.getRef().child("whishlist").setValue("1");
                                                     Snackbar.make(coordinatorLayout,"Added to Whishlist",Snackbar.LENGTH_SHORT).show();
-//                                                    Snackbar.SnackbarLayout layout = (Snackbar.SnackbarLayout) snackbar.getView();
-//
-//                                                    TextView textView = (TextView) layout.findViewById(android.support.design.R.id.snackbar_text);
-//                                                    textView.setVisibility(View.INVISIBLE);
-//
-//
-//                                                    View snackView = LayoutInflater.from(context).inflate(R.layout.snackview, null);
-//
-//                                                    TextView textViewTop = (TextView) snackView.findViewById(R.id.snackviewText);
-//
-//                                                    layout.setPadding(0,0,0,0);
-//
-//                                                    layout.addView(snackView, 0);
 
                                                 }
 
 
                                                 if (fav.equals("1")) {
-                                                    int color = Color.parseColor("#39000000"); //The color u want
+                                                    int color = Color.parseColor("#39000000");
                                                     wishlistimage.setColorFilter(color);
                                                     ds.getRef().child("whishlist").setValue("0");
                                                     FirebaseDatabase.getInstance().getReference("favourites").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
@@ -235,9 +226,6 @@ if(singelProductModel.getWhishlist().equals("1"))
 
                                                                 }
                                                             });
-
-//                                                ds.getRef().child("whishlist").setValue("0");
-
                                                 }
                                             }
 
@@ -257,8 +245,45 @@ if(singelProductModel.getWhishlist().equals("1"))
                     });
 
                 }
+
+//                    Log.d(TAG, "onClick: newArrivals");
+//                    fd = FirebaseDatabase.getInstance();
+//                    db = fd.getReference("categoreis");
+//                    db.addListenerForSingleValueEvent(new ValueEventListener() {
+//                        @Override
+//                        public void onDataChange(DataSnapshot dataSnapshot) {
+//                            for (final DataSnapshot ds : dataSnapshot.child("Accessories ").child("SubAccessories").child("Accessories (For Disable-friendly Bathroom)").getChildren()) {
+//                                {
+//                                    db.limitToFirst(4).addValueEventListener(new ValueEventListener() {
+//                                        @Override
+//                                        public void onDataChange(DataSnapshot dataSnapshot) {
+//
+//                                        }
+//
+//                                        @Override
+//                                        public void onCancelled(DatabaseError databaseError) {
+//
+//                                        }
+//                                    });
+////                                    Log.d(TAG, "onDataChange datasnap: "+dataSnapshot);
+//
+//
+//                                }
+//
+//                            }
+//                        }
+//
+//
+//                        @Override
+//                        public void onCancelled(DatabaseError databaseError) {
+//
+//                        }
+//                    });
+//
+//                }
                 else if(anothercat !=null) {
                     if (anothercat.equals("Steam Cabins")) {
+                        Log.d(TAG, "onClick: steamcabinbs");
 //                    Toast.makeText(context, ""+anothercat, Toast.LENGTH_SHORT).show();
 
                         fd = FirebaseDatabase.getInstance();
@@ -278,7 +303,7 @@ if(singelProductModel.getWhishlist().equals("1"))
                                                         Log.d("fav", "yes");
                                                         firebaseDatabase = FirebaseDatabase.getInstance();
                                                         databaseReference = firebaseDatabase.getReference();
-                                                        DatabaseReference databaseReference1 = databaseReference.child("favourites").child((FirebaseAuth.getInstance().getCurrentUser().getUid())).push();
+                                                        DatabaseReference databaseReference1 = databaseReference.child("favourites").child((FirebaseAuth.getInstance().getCurrentUser().getUid())).child(productcodev);
                                                         databaseReference1.child("title").setValue(title);
                                                         databaseReference1.child("image").setValue(image);
                                                         databaseReference1.child("price").setValue(price);
@@ -331,9 +356,8 @@ if(singelProductModel.getWhishlist().equals("1"))
                             }
                         });
                     }
-                }
-                else if(anothercat !=null) {
                     if (anothercat.equals("Whirlpools")) {
+                        Log.d(TAG, "onClick: Whirlpools");
                         fd = FirebaseDatabase.getInstance();
                         db = fd.getReference("categoreis");
                         db.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -351,7 +375,7 @@ if(singelProductModel.getWhishlist().equals("1"))
                                                         Log.d("fav", "yes");
                                                         firebaseDatabase = FirebaseDatabase.getInstance();
                                                         databaseReference = firebaseDatabase.getReference();
-                                                        DatabaseReference databaseReference1 = databaseReference.child("favourites").child((FirebaseAuth.getInstance().getCurrentUser().getUid())).push();
+                                                        DatabaseReference databaseReference1 = databaseReference.child("favourites").child((FirebaseAuth.getInstance().getCurrentUser().getUid())).child(productcodev);
                                                         databaseReference1.child("title").setValue(title);
                                                         databaseReference1.child("image").setValue(image);
                                                         databaseReference1.child("price").setValue(price);
@@ -408,7 +432,9 @@ if(singelProductModel.getWhishlist().equals("1"))
                     }
                 }
 
+
                 else{
+                    Log.d(TAG, "onClick: 4 categories");
 
                     fd = FirebaseDatabase.getInstance();
                     db = fd.getReference("categoreis");
@@ -427,7 +453,7 @@ if(singelProductModel.getWhishlist().equals("1"))
                                                     Log.d("fav", "yes");
                                                     firebaseDatabase = FirebaseDatabase.getInstance();
                                                     databaseReference = firebaseDatabase.getReference();
-                                                    DatabaseReference databaseReference1 = databaseReference.child("favourites").child((FirebaseAuth.getInstance().getCurrentUser().getUid())).push();
+                                                    DatabaseReference databaseReference1 = databaseReference.child("favourites").child((FirebaseAuth.getInstance().getCurrentUser().getUid())).child(productcodev);
                                                     databaseReference1.child("title").setValue(title);
                                                     databaseReference1.child("image").setValue(image);
                                                     databaseReference1.child("price").setValue(price);

@@ -11,7 +11,7 @@
             android:layout_height="150dp"
             android:layout_margin="10dp"
             android:id="@+id/newlyImageview"
-            android:src="@drawable/image1"/>
+         />
         <TextView
            android:fontFamily="@font/dark"
             android:textStyle="bold"

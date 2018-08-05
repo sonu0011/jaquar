@@ -1,13 +1,16 @@
 package com.example.sonu.jaquar.Adapters;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,6 +19,13 @@ import com.example.sonu.jaquar.BuyProduct;
 import com.example.sonu.jaquar.Models.NewlyProductModel;
 import com.example.sonu.jaquar.Models.SingelProductModel;
 import com.example.sonu.jaquar.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 
@@ -36,7 +46,7 @@ public class FavourateAdapter extends RecyclerView.Adapter<FavourateAdapter.View
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-return new ViewHolder(LayoutInflater.from(ctx).inflate(R.layout.newlyproductlayout,parent,false));
+return new ViewHolder(LayoutInflater.from(ctx).inflate(R.layout.favlayout,parent,false),list);
     }
 
     @Override
@@ -59,14 +69,69 @@ return new ViewHolder(LayoutInflater.from(ctx).inflate(R.layout.newlyproductlayo
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView image;
         TextView title,productcode,price,viewMore;
+        Button deletefav;
 
-        public ViewHolder(View itemView) {
+        public ViewHolder(View itemView, final List<NewlyProductModel> newlyProductModels) {
             super(itemView);
             image =itemView.findViewById(R.id.newlyImageview);
             title =itemView.findViewById(R.id.newlytitel);
             productcode =itemView.findViewById(R.id.newlyProductCode);
             price =itemView.findViewById(R.id.newlyProductPrice);
             viewMore =itemView.findViewById(R.id.newlyViewMore);
+            deletefav =itemView.findViewById(R.id.newlyDeletefav);
+            deletefav.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    AlertDialog.Builder  builder = new AlertDialog.Builder(ctx,R.style.Dialog);
+
+                    builder.setTitle("Delete");
+                    builder.setMessage("Do you want to Delete ? ");
+                    builder.setIcon(R.drawable.deletewhite);
+
+                    builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            //your deleting code
+                            if (newlyProductModels.size()>0) {
+                                newlyProductModels.remove(getAdapterPosition());
+                                notifyItemChanged(getAdapterPosition());
+                                notifyItemRangeRemoved(getAdapterPosition(), newlyProductModels.size());
+                            }
+                            FirebaseDatabase firebaseDatabase =FirebaseDatabase.getInstance();
+                            FirebaseAuth firebaseAuth =FirebaseAuth.getInstance();
+                            FirebaseUser firebaseUser =firebaseAuth.getCurrentUser();
+                            final DatabaseReference databaseReference = firebaseDatabase.getReference("favourites").child(firebaseUser.getUid());
+                            databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    for(DataSnapshot ds:dataSnapshot.getChildren())
+                                    {
+                                        databaseReference.child(productcode.getText().toString()).removeValue();
+
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+
+                        }
+
+                    });
+                    builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            dialog.dismiss();
+
+                        }
+                    });
+                    builder.create();
+                    builder.show();
+                    Log.d("button clicked","yes");
+                }
+            });
 
         }
         public void getData(final int position)

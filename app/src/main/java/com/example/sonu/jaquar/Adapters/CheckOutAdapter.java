@@ -2,8 +2,10 @@ package com.example.sonu.jaquar.Adapters;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -265,30 +267,53 @@ TextView tpriceValue;
            deletebtn.setOnClickListener(new View.OnClickListener() {
                @Override
                public void onClick(View view) {
+                   AlertDialog.Builder  builder = new AlertDialog.Builder(context);
+                     builder.setTitle("Remove");
+                           builder.setMessage("Do you want to Remove ? ");
+                           builder.setIcon(R.drawable.ic_delete_black_24dp);
+
+                           builder.setPositiveButton("Remove", new DialogInterface.OnClickListener() {
+
+                               public void onClick(DialogInterface dialog, int whichButton) {
+                                   //your deleting code
+                                   if (checkOutMOdels.size()>0) {
+                                       checkOutMOdels.remove(getAdapterPosition());
+                                       notifyItemChanged(getAdapterPosition());
+                                       notifyItemRangeRemoved(getAdapterPosition(), checkOutMOdels.size());
+                                   }
+                                   FirebaseDatabase firebaseDatabase =FirebaseDatabase.getInstance();
+                                   FirebaseAuth firebaseAuth =FirebaseAuth.getInstance();
+                                   FirebaseUser firebaseUser =firebaseAuth.getCurrentUser();
+                                   final DatabaseReference databaseReference = firebaseDatabase.getReference("cartValues").child(firebaseUser.getUid());
+                                   databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                                       @Override
+                                       public void onDataChange(DataSnapshot dataSnapshot) {
+                                           for(DataSnapshot ds:dataSnapshot.getChildren())
+                                           {
+                                               databaseReference.child(productcode.getText().toString()).removeValue();
+                                           }
+                                       }
+
+                                       @Override
+                                       public void onCancelled(DatabaseError databaseError) {
+
+                                       }
+                                   });
+
+                               }
+
+                           });
+                           builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                               public void onClick(DialogInterface dialog, int which) {
+
+                                   dialog.dismiss();
+
+                               }
+                           });
+                           builder.create();
+                           builder.show();
                    Log.d("button clicked","yes");
-                   if (checkOutMOdels.size()>0) {
-                       checkOutMOdels.remove(getAdapterPosition());
-                       notifyItemChanged(getAdapterPosition());
-                       notifyItemRangeRemoved(getAdapterPosition(), checkOutMOdels.size());
-                   }
-                   FirebaseDatabase firebaseDatabase =FirebaseDatabase.getInstance();
-                   FirebaseAuth firebaseAuth =FirebaseAuth.getInstance();
-                   FirebaseUser firebaseUser =firebaseAuth.getCurrentUser();
-                   final DatabaseReference databaseReference = firebaseDatabase.getReference("cartValues").child(firebaseUser.getUid());
-                   databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-                       @Override
-                       public void onDataChange(DataSnapshot dataSnapshot) {
-                           for(DataSnapshot ds:dataSnapshot.getChildren())
-                           {
-                               databaseReference.child(productcode.getText().toString()).removeValue();
-                           }
-                       }
 
-                       @Override
-                       public void onCancelled(DatabaseError databaseError) {
-
-                       }
-                   });
                }
            });
         }

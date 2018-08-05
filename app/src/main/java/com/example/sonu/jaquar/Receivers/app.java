@@ -49,7 +49,7 @@ public class app extends Application {
                 }
             }
         };
-        handler.postDelayed(runnable,20000);
+        handler.postDelayed(runnable,40000);
     }
     
     }

@@ -3,9 +3,11 @@ package com.example.sonu.jaquar;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
 import android.os.Build;
 import android.provider.ContactsContract;
 import android.provider.SyncStateContract;
@@ -29,6 +31,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.sonu.jaquar.Constants.CheckInternetCoonnection;
 import com.example.sonu.jaquar.Constants.SearchConstants;
+import com.example.sonu.jaquar.Receivers.InternetReceiver;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -54,32 +57,16 @@ int checkProduct =0;
     String image,price,title,productcode;
     CoordinatorLayout coordinatorLayout;
     private AlertDialog.Builder mbuilder;
+    private InternetReceiver internetReceiver;
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buy_product);
-        boolean b = new CheckInternetCoonnection().CheckNetwork(BuyProduct.this);
-        if (!b) {
-            mbuilder = new AlertDialog.Builder(BuyProduct.this);
-            View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.internetconnectiondialog, null);
-            mbuilder.setView(view);
-            mbuilder.setCancelable(false);
-            mbuilder.create();
-            final AlertDialog alertDialog = mbuilder.show();
-
-            view.findViewById(R.id.cancel_internet).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    alertDialog.dismiss();
-                    finish();
-
-                }
-            });
-        } else {
-
-
+        IntentFilter intentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        internetReceiver = new InternetReceiver();
+        registerReceiver(internetReceiver, intentFilter);
             cartValue = findViewById(R.id.cartValue);
             coordinatorLayout = findViewById(R.id.adtocartCordinaterlayout);
             firebaseDatabase = FirebaseDatabase.getInstance();
@@ -111,6 +98,7 @@ int checkProduct =0;
             if (image != null && title != null && price != null && productcode != null) {
                 Log.d("IntentValuesAre", image + "  " + title + "  " + price + "  " + buyProductcode);
                 Glide.with(BuyProduct.this).load(image).placeholder(R.drawable.loader).into(buyImageView);
+                buyImageView.setClipToOutline(true);
                 buyTitle.setText(title);
                 buyPrice.setText(price + ".00");
                 buyProductcode.setText(productcode);
@@ -139,7 +127,7 @@ int checkProduct =0;
                 }
             });
         }
-    }
+
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
@@ -170,9 +158,6 @@ int checkProduct =0;
     @Override
     protected void onStart() {
         super.onStart();
-        boolean b = new CheckInternetCoonnection().CheckNetwork(BuyProduct.this);
-        Log.d(TAG, "onStart: valued of boolean"+b);
-        if (!b) {
 
             databaseReference.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -238,11 +223,14 @@ int checkProduct =0;
             });
 
         }
-    }
+
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (internetReceiver != null) {
+            unregisterReceiver(internetReceiver);
+        }
         checkProduct=0;
 
     }
@@ -256,25 +244,7 @@ int checkProduct =0;
     @Override
     protected void onRestart() {
         super.onRestart();
-        boolean b = new CheckInternetCoonnection().CheckNetwork(BuyProduct.this);
-        if (!b) {
-            mbuilder = new AlertDialog.Builder(BuyProduct.this);
-            View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.internetconnectiondialog, null);
-            mbuilder.setView(view);
-            mbuilder.setCancelable(false);
-            mbuilder.create();
-            final AlertDialog alertDialog = mbuilder.show();
 
-            view.findViewById(R.id.cancel_internet).setOnClickListener(new View.OnClickListener() {
-                @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-                @Override
-                public void onClick(View view) {
-
-                    alertDialog.dismiss();
-
-                }
-            });
-        }
         checkProduct=0;
     }
 }

@@ -2,7 +2,9 @@ package com.example.sonu.jaquar;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
 import android.provider.SyncStateContract;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
@@ -31,6 +33,7 @@ import com.example.sonu.jaquar.Constants.CheckInternetCoonnection;
 import com.example.sonu.jaquar.Constants.SearchConstants;
 import com.example.sonu.jaquar.Models.CategoriesModel;
 import com.example.sonu.jaquar.Models.GetValue;
+import com.example.sonu.jaquar.Receivers.InternetReceiver;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -50,30 +53,16 @@ public class ShowByCategoty extends AppCompatActivity  {
   ProgressDialog progressDialog;
     Toolbar toolbar;
     private AlertDialog.Builder mbuilder;
+    private InternetReceiver internetReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_by_categoty);
-        boolean b = new CheckInternetCoonnection().CheckNetwork(ShowByCategoty.this);
-        if (!b) {
-            mbuilder = new AlertDialog.Builder(ShowByCategoty.this);
-            View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.internetconnectiondialog, null);
-            mbuilder.setView(view);
-            mbuilder.setCancelable(false);
-            mbuilder.create();
-            final AlertDialog alertDialog = mbuilder.show();
-
-            view.findViewById(R.id.cancel_internet).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    alertDialog.dismiss();
-                    finish();
-
-                }
-            });
-        }
+        Log.d(TAG, "onCreate: ");
+        IntentFilter intentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        internetReceiver = new InternetReceiver();
+        registerReceiver(internetReceiver, intentFilter);
         recyclerView = findViewById(R.id.recyclerview);
         recyclerView.setHasFixedSize(true);
         toolbar =findViewById(R.id.toolbarCategory);
@@ -157,24 +146,15 @@ public class ShowByCategoty extends AppCompatActivity  {
     protected void onRestart() {
         super.onRestart();
         Log.d(TAG, "onRestart: ");
-        boolean b = new CheckInternetCoonnection().CheckNetwork(ShowByCategoty.this);
-        if (!b) {
-            mbuilder = new AlertDialog.Builder(ShowByCategoty.this);
-            View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.internetconnectiondialog, null);
-            mbuilder.setView(view);
-            mbuilder.setCancelable(false);
-            mbuilder.create();
-            final AlertDialog alertDialog = mbuilder.show();
 
-            view.findViewById(R.id.cancel_internet).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+    }
 
-                    alertDialog.dismiss();
-                    finish();
-
-                }
-            });
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy: ");
+        if (internetReceiver != null) {
+            unregisterReceiver(internetReceiver);
         }
     }
 

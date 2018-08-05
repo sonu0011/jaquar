@@ -1,8 +1,11 @@
 package com.example.sonu.jaquar;
 
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
@@ -26,6 +29,7 @@ import com.example.sonu.jaquar.Adapters.SubAccessoriesAdapter;
 import com.example.sonu.jaquar.Constants.CheckInternetCoonnection;
 import com.example.sonu.jaquar.Models.SingelProductModel;
 import com.example.sonu.jaquar.Models.SubAccessoriesModel;
+import com.example.sonu.jaquar.Receivers.InternetReceiver;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -55,30 +59,15 @@ SubAccessoriesAdapter subAccessoriesAdapter;
 Toolbar toolbar;
 ProgressDialog progressDialog;
     private AlertDialog.Builder mbuilder;
+    private BroadcastReceiver internetReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sub_category);
-        boolean b = new CheckInternetCoonnection().CheckNetwork(SubCategory.this);
-        if (!b) {
-            mbuilder = new AlertDialog.Builder(SubCategory.this);
-            View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.internetconnectiondialog, null);
-            mbuilder.setView(view);
-            mbuilder.setCancelable(false);
-            mbuilder.create();
-            final AlertDialog alertDialog = mbuilder.show();
-
-            view.findViewById(R.id.cancel_internet).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    alertDialog.dismiss();
-                    finish();
-
-                }
-            });
-        }
+        IntentFilter intentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        internetReceiver = new InternetReceiver();
+        registerReceiver(internetReceiver, intentFilter);
         coordinatorLayout =findViewById(R.id.cordinatesub);
         toolbar =findViewById(R.id.toolbarSubCategory);
         toolbar.setTitle("Sub Category");
@@ -106,25 +95,7 @@ ProgressDialog progressDialog;
     @Override
     protected void onRestart() {
         super.onRestart();
-        boolean b = new CheckInternetCoonnection().CheckNetwork(SubCategory.this);
-        if (!b) {
-            mbuilder = new AlertDialog.Builder(SubCategory.this);
-            View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.internetconnectiondialog, null);
-            mbuilder.setView(view);
-            mbuilder.setCancelable(false);
-            mbuilder.create();
-            final AlertDialog alertDialog = mbuilder.show();
 
-            view.findViewById(R.id.cancel_internet).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    alertDialog.dismiss();
-                    finish();
-
-                }
-            });
-        }
         Log.d("SubCategoty","onRestart");
         listSingleProduct.clear();
     }
@@ -139,6 +110,9 @@ ProgressDialog progressDialog;
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (internetReceiver != null) {
+            unregisterReceiver(internetReceiver);
+        }
         Log.d("SubCategoty","onDestroy");
     }
     @Override

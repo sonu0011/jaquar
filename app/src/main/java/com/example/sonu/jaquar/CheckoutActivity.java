@@ -6,8 +6,11 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -36,6 +39,7 @@ import com.example.sonu.jaquar.Adapters.CheckOutAdapter;
 import com.example.sonu.jaquar.Constants.CheckInternetCoonnection;
 import com.example.sonu.jaquar.Constants.SearchConstants;
 import com.example.sonu.jaquar.Models.CheckOutMOdel;
+import com.example.sonu.jaquar.Receivers.InternetReceiver;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -76,30 +80,15 @@ Handler handler;
 Runnable runnable;
 ProgressDialog progressDialog;
     private AlertDialog.Builder mbuilder;
+    private BroadcastReceiver internetReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checkout);
-        boolean b = new CheckInternetCoonnection().CheckNetwork(CheckoutActivity.this);
-        if (!b) {
-            mbuilder = new AlertDialog.Builder(CheckoutActivity.this);
-            View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.internetconnectiondialog, null);
-            mbuilder.setView(view);
-            mbuilder.setCancelable(false);
-            mbuilder.create();
-            final AlertDialog alertDialog = mbuilder.show();
-
-            view.findViewById(R.id.cancel_internet).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    alertDialog.dismiss();
-                    finish();
-
-                }
-            });
-        }
+        IntentFilter intentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        internetReceiver = new InternetReceiver();
+        registerReceiver(internetReceiver, intentFilter);
         Log.d(tag,"OnCreate");
         progressDialog =new ProgressDialog(CheckoutActivity.this);
         notificationManagerCompat =NotificationManagerCompat.from(getApplicationContext());
@@ -243,7 +232,7 @@ ProgressDialog progressDialog;
                            SearchConstants.totalpriceValue = SearchConstants.totalpriceValue + Integer.valueOf(tprice);
                            Log.d("totalpricefirebase", String.valueOf(tprice));
                            Log.d("totalpriceAg", String.valueOf(SearchConstants.totalpriceValue));
-                           textView.setText(String.valueOf(SearchConstants.totalpriceValue));
+                           textView.setText(String.valueOf(SearchConstants.totalpriceValue)+".00");
                        }
 
                    }
@@ -359,7 +348,7 @@ ProgressDialog progressDialog;
                     Log.d(tag, "for loop");
                     CheckOutMOdel checkOutMOdel = dataSnapshot1.getValue(CheckOutMOdel.class);
                     checkOutMOdelList.add(checkOutMOdel);
-                    checkOutAdapter =new CheckOutAdapter(getApplicationContext(),checkOutMOdelList);
+                    checkOutAdapter =new CheckOutAdapter(CheckoutActivity.this,checkOutMOdelList);
                     recyclerView.setAdapter(checkOutAdapter);
                 }
                 progressDialog.dismiss();
@@ -404,30 +393,15 @@ ProgressDialog progressDialog;
         super.onDestroy();
         SearchConstants.totalpriceValue=0;
         Log.d("whichMethod","onDestroy");
+        if (internetReceiver != null) {
+            unregisterReceiver(internetReceiver);
+        }
 
     }
     @Override
     protected void onRestart() {
         super.onRestart();
-        boolean b = new CheckInternetCoonnection().CheckNetwork(CheckoutActivity.this);
-        if (!b) {
-            mbuilder = new AlertDialog.Builder(CheckoutActivity.this);
-            View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.internetconnectiondialog, null);
-            mbuilder.setView(view);
-            mbuilder.setCancelable(false);
-            mbuilder.create();
-            final AlertDialog alertDialog = mbuilder.show();
 
-            view.findViewById(R.id.cancel_internet).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    alertDialog.dismiss();
-                    finish();
-
-                }
-            });
-        }
         Log.d("whichMethod","onRestart");
 
     }

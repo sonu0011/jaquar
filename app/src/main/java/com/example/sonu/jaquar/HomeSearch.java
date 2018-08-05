@@ -1,7 +1,10 @@
 package com.example.sonu.jaquar;
 
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -24,6 +27,7 @@ import com.example.sonu.jaquar.Adapters.SIngleProductAdapter;
 import com.example.sonu.jaquar.Constants.CheckInternetCoonnection;
 import com.example.sonu.jaquar.Models.SearchModel;
 import com.example.sonu.jaquar.Models.SingelProductModel;
+import com.example.sonu.jaquar.Receivers.InternetReceiver;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -49,30 +53,15 @@ public class HomeSearch extends AppCompatActivity {
     SIngleProductAdapter sIngleProductAdapter;
     ProgressDialog progressDialog;
     private AlertDialog.Builder mbuilder;
+    private BroadcastReceiver internetReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_search);
-        boolean b = new CheckInternetCoonnection().CheckNetwork(HomeSearch.this);
-        if (!b) {
-            mbuilder = new AlertDialog.Builder(HomeSearch.this);
-            View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.internetconnectiondialog, null);
-            mbuilder.setView(view);
-            mbuilder.setCancelable(false);
-            mbuilder.create();
-            final AlertDialog alertDialog = mbuilder.show();
-
-            view.findViewById(R.id.cancel_internet).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    alertDialog.dismiss();
-                    finish();
-
-                }
-            });
-        }
+        IntentFilter intentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        internetReceiver = new InternetReceiver();
+        registerReceiver(internetReceiver, intentFilter);
         list =new ArrayList<>();
         progressDialog =new ProgressDialog(HomeSearch.this);
         searchrecycleview =findViewById(R.id.searchRecycleview);
@@ -130,25 +119,7 @@ public class HomeSearch extends AppCompatActivity {
     protected void onRestart() {
         super.onRestart();
         Log.d(TAG, "onRestart: ");
-        boolean b = new CheckInternetCoonnection().CheckNetwork(HomeSearch.this);
-        if (!b) {
-            mbuilder = new AlertDialog.Builder(HomeSearch.this);
-            View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.internetconnectiondialog, null);
-            mbuilder.setView(view);
-            mbuilder.setCancelable(false);
-            mbuilder.create();
-            final AlertDialog alertDialog = mbuilder.show();
 
-            view.findViewById(R.id.cancel_internet).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    alertDialog.dismiss();
-                    finish();
-
-                }
-            });
-        }
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -232,6 +203,11 @@ public class HomeSearch extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        Log.d(TAG, "onDestroy: ");
+        if (internetReceiver != null) {
+            unregisterReceiver(internetReceiver);
+        }
+
 
     }
 }
