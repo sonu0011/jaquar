@@ -1,5 +1,6 @@
 package com.example.sonu.jaquar.Adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -10,14 +11,13 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.bumptech.glide.Glide;
 import com.example.sonu.jaquar.BuyProduct;
 import com.example.sonu.jaquar.Models.HomeDataModel;
-import com.example.sonu.jaquar.Models.SingelProductModel;
 import com.example.sonu.jaquar.R;
 
 import java.util.List;
@@ -27,14 +27,16 @@ import java.util.List;
  */
 
 public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    public static final String TAG ="HomeAdapter";
 List<HomeDataModel>homeDataModels;
 Context context;
+    float x ;
+    float y;
 
     public HomeAdapter(List<HomeDataModel> homeDataModels, Context context) {
         this.homeDataModels = homeDataModels;
         this.context = context;
     }
-
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -49,9 +51,9 @@ Context context;
             NewProductViewHolder newProductViewHolder =new NewProductViewHolder(view);
             return newProductViewHolder;
         }
-
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, int position) {
 
@@ -59,14 +61,158 @@ Context context;
 
         {
 
+            ((SliderViewHolder) holder).viewFlipper.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View view, MotionEvent motionEvent) {
+                    if (motionEvent.getAction() == MotionEvent.ACTION_DOWN)
+                    {
+                        x =motionEvent.getX();
+                        Log.d(TAG, "onTouch: ActionDown");
+                    }
+                    if (motionEvent.getAction() == MotionEvent.ACTION_UP)
+                    {
+                        y =motionEvent.getX();
+
+                        Log.d(TAG, "onTouch: ActionUp");
+                    }
+
+                    if (motionEvent.getAction() == MotionEvent.ACTION_MOVE)
+                    {
+                        Log.d(TAG, "onTouch: "+Math.abs(x-y));
+                        Log.d(TAG, "onTouch:ActionMove x is"+x+"y is "+y);
+                        if (Math.abs(x-y) >900) {
+                            if (x > y) {
+                                Log.d(TAG, "onTouch: x>y");
+
+                                ((SliderViewHolder) holder).viewFlipper.setInAnimation(context, R.anim.slidein_right);
+                                ((SliderViewHolder) holder).viewFlipper.setOutAnimation(context, R.anim.slideout_left);
+
+                                ((SliderViewHolder) holder).viewFlipper.showNext();
+                                int i = ((SliderViewHolder) holder).viewFlipper.getDisplayedChild();
+                                Log.d(TAG, "onClicknext: " + i);
+
+                                if (i == 0) {
+                                    Log.d(TAG, "onBindViewHolder: " + i);
+                                    ((SliderViewHolder) holder).r1.setChecked(true);
+                                }
+                                if (i == 1) {
+                                    Log.d(TAG, "onBindViewHolder: " + i);
+                                    ((SliderViewHolder) holder).r2.setChecked(true);
+                                }
+                                if (i == 2) {
+                                    Log.d(TAG, "onBindViewHolder: " + i);
+                                    ((SliderViewHolder) holder).r3.setChecked(true);
+                                }
+                            }
+                        }
+                        if (Math.abs(x-y)<100)
+                        {
+                            Log.d(TAG, "onTouch:swipe from left to right ");
+                            ((SliderViewHolder) holder).viewFlipper.setInAnimation(context, android.R.anim.slide_in_left);
+                            ((SliderViewHolder) holder).viewFlipper.setOutAnimation(context,  android.R.anim.slide_out_right);
+                            ((SliderViewHolder) holder).viewFlipper.showPrevious();
+                            int i =((SliderViewHolder) holder).viewFlipper.getDisplayedChild();
+                            Log.d(TAG, "onClickprev: "+i);
+                            if (i==0){
+                                Log.d(TAG, "onBindViewHolder: "+i);
+                                ((SliderViewHolder) holder).r1.setChecked(true);
+                            }
+                            if (i==1){
+                                Log.d(TAG, "onBindViewHolder: "+i);
+                                ((SliderViewHolder) holder).r2.setChecked(true);
+                            }
+                            if (i==2){
+                                Log.d(TAG, "onBindViewHolder: "+i);
+                                ((SliderViewHolder) holder).r3.setChecked(true);
+                            }
+                        }
+                            
+                        
+                       
+                    }
+                  
+                    return false;
+                }
+            });
+
             ((SliderViewHolder) holder).img.setImageResource(R.drawable.image2);
             ((SliderViewHolder) holder).img1.setImageResource(R.drawable.image3);
             ((SliderViewHolder) holder).imag2.setImageResource(R.drawable.image1);
+            int i =((SliderViewHolder) holder).viewFlipper.getDisplayedChild();
+            if (i==0){
+                Log.d(TAG, "onBindViewHolder: "+i);
+                ((SliderViewHolder) holder).r1.setChecked(true);
+            }
+                ((SliderViewHolder) holder).r1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        ((SliderViewHolder) holder).viewFlipper.setDisplayedChild(0);
+                    }
+                });
+            ((SliderViewHolder) holder).r2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ((SliderViewHolder) holder).viewFlipper.setDisplayedChild(1);
+                }
+            });
+            ((SliderViewHolder) holder).r3.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ((SliderViewHolder) holder).viewFlipper.setDisplayedChild(2);
+                }
+            });
+            ((SliderViewHolder) holder).next.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
 
-            ((SliderViewHolder) holder).viewFlipper.setAutoStart(true);
+                    ((SliderViewHolder) holder).viewFlipper.setInAnimation(context, R.anim.slidein_right);
+                    ((SliderViewHolder) holder).viewFlipper.setOutAnimation(context, R.anim.slideout_left);
+
+                    ((SliderViewHolder) holder).viewFlipper.showNext();
+                    int i =((SliderViewHolder) holder).viewFlipper.getDisplayedChild();
+                    Log.d(TAG, "onClicknext: "+i);
+
+                    if (i==0){
+                        Log.d(TAG, "onBindViewHolder: "+i);
+                        ((SliderViewHolder) holder).r1.setChecked(true);
+                    }
+                    if (i==1){
+                        Log.d(TAG, "onBindViewHolder: "+i);
+                        ((SliderViewHolder) holder).r2.setChecked(true);
+                    }
+                    if (i==2){
+                        Log.d(TAG, "onBindViewHolder: "+i);
+                        ((SliderViewHolder) holder).r3.setChecked(true);
+                    }
+                }
+            });
+            ((SliderViewHolder) holder).prev.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                ((SliderViewHolder) holder).viewFlipper.setInAnimation(context, android.R.anim.slide_in_left);
+                  ((SliderViewHolder) holder).viewFlipper.setOutAnimation(context,  android.R.anim.slide_out_right);
+                    ((SliderViewHolder) holder).viewFlipper.showPrevious();
+                    int i =((SliderViewHolder) holder).viewFlipper.getDisplayedChild();
+                    Log.d(TAG, "onClickprev: "+i);
+                    if (i==0){
+                        Log.d(TAG, "onBindViewHolder: "+i);
+                        ((SliderViewHolder) holder).r1.setChecked(true);
+                    }
+                    if (i==1){
+                        Log.d(TAG, "onBindViewHolder: "+i);
+                        ((SliderViewHolder) holder).r2.setChecked(true);
+                    }
+                    if (i==2){
+                        Log.d(TAG, "onBindViewHolder: "+i);
+                        ((SliderViewHolder) holder).r3.setChecked(true);
+                    }
+                }
+            });
+//            ((SliderViewHolder) holder).viewFlipper.setFlipInterval(3000);
+//            ((SliderViewHolder) holder).viewFlipper.setAutoStart(true);
             ((SliderViewHolder) holder).viewFlipper.setOutAnimation(context, android.R.anim.slide_out_right);
             ((SliderViewHolder) holder).viewFlipper.setInAnimation(context, android.R.anim.slide_in_left);
-
             ((SliderViewHolder) holder).viewFlipper.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -124,14 +270,11 @@ Context context;
 
         }
 
-
     }
-
     @Override
     public int getItemCount() {
         return homeDataModels.size();
     }
-
     @Override
     public int getItemViewType(int position) {
         if(position==0)
@@ -147,6 +290,9 @@ Context context;
     {
 //        ImageView sliderimage;
 //        TextView sliderTitle;
+ImageView next,prev;
+RadioButton r1,r2,r3;
+
         ImageView img,img1,imag2;
         ViewFlipper viewFlipper;
 
@@ -156,6 +302,12 @@ Context context;
             img =itemView.findViewById(R.id.flipimage);
             img1 =itemView.findViewById(R.id.flipimage1);
             imag2 =itemView.findViewById(R.id.flipimage2);
+            next =itemView.findViewById(R.id.sliderNext);
+            prev =itemView.findViewById(R.id.sliderPrev);
+            r1 =itemView.findViewById(R.id.rgb1);
+            r2 =itemView.findViewById(R.id.rgb2);
+            r3 =itemView.findViewById(R.id.rgb3);
+
 
 //            sliderimage =itemView.findViewById(R.id.sliderImage);
 //            sliderTitle =itemView.findViewById(R.id.sliderText);
@@ -164,6 +316,7 @@ Context context;
     public class NewProductViewHolder extends RecyclerView.ViewHolder
     {
         ImageView productImage;
+
         TextView producttitle,productprice,productcode;
         public NewProductViewHolder(View itemView) {
             super(itemView);
@@ -171,6 +324,7 @@ Context context;
             productprice =itemView.findViewById(R.id.newlyProductPrice);
             productcode =itemView.findViewById(R.id.newlyProductCode);
             producttitle =itemView.findViewById(R.id.newlytitel);
+
         }
         public void getData(final int position)
         {

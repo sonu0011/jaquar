@@ -35,4 +35,38 @@
 
     </ViewFlipper>
 
+    <RadioGroup
+        android:orientation="horizontal"
+        android:layout_marginTop="190dp"
+        android:layout_width="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_height="wrap_content">
+        <RadioButton
+            android:id="@+id/rgb1"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <RadioButton
+            android:id="@+id/rgb2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <RadioButton
+            android:id="@+id/rgb3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RadioGroup>
+<ImageView
+    android:id="@+id/sliderNext"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="150dp"
+    android:layout_marginLeft="320dp"
+    android:src="@drawable/ic_navigate_next_black_24dp"/>
+<ImageView
+    android:id="@+id/sliderPrev"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="150dp"
+    android:layout_marginLeft="15dp"
+    android:src="@drawable/ic_navigate_before_black_24dp"/>
 </RelativeLayout>

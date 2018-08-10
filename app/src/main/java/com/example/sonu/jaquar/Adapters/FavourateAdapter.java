@@ -136,7 +136,7 @@ return new ViewHolder(LayoutInflater.from(ctx).inflate(R.layout.favlayout,parent
         }
         public void getData(final int position)
         {
-            viewMore.setOnClickListener(new View.OnClickListener() {
+            itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     NewlyProductModel singelProductModel = list.get(position);

@@ -34,8 +34,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Date;
 
@@ -75,7 +77,7 @@ public class NotificationBroadcaster extends BroadcastReceiver {
         final PendingIntent pendingIntent = PendingIntent.getActivity(context, 205, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connectivityManager!=null) {
-            NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+            final NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
             if ((networkInfo != null) && (networkInfo.isConnected())) {
                 if (firebaseUser != null) {
                     Query query = databaseReference.orderByKey().limitToFirst(1);
@@ -94,19 +96,50 @@ public class NotificationBroadcaster extends BroadcastReceiver {
                                     String title = ds.child("title").getValue(String.class);
                                     String price = ds.child("totalprice").getValue(String.class);
 
-
-                                    Log.d(TAG, "onDataChange: " +bitmap+ image + productcode + title + price + dataSnapshot);
+//                                    URL url = null;
+//                                    try {
+//                                        url = new URL(image);
+//                                    } catch (MalformedURLException e) {
+//                                        e.printStackTrace();
+//                                    }
+//                                    HttpURLConnection connection = null;
+//                                    try {
+//                                        connection = (HttpURLConnection) url.openConnection();
+//                                    } catch (IOException e) {
+//                                        e.printStackTrace();
+//                                    }
+//                                    connection.setDoInput(true);
+//                                    try {
+//                                        connection.connect();
+//                                    } catch (IOException e) {
+//                                        e.printStackTrace();
+//                                    }
+//                                    InputStream input = null;
+//                                    try {
+//                                        input = connection.getInputStream();
+//                                    } catch (IOException e) {
+//                                        e.printStackTrace();
+//                                    }
+//                                    Bitmap bitmap = BitmapFactory.decodeStream(input);
+//                                    if (bitmap != null){
+//                                        Log.d(TAG, "onDataChange: "+bitmap);
+//                                    }
                                     RemoteViews notificationLayout = new RemoteViews(context.getPackageName(), R.layout.notificationlayout);
+//                                    try {
+//                                        URL url =new URL(image);
+//                                        Bitmap img = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+//                                        Log.d(TAG, "onDataChange: "+img);
+//                                    } catch (MalformedURLException e) {
+//                                        e.printStackTrace();
+//                                    } catch (IOException e) {
+//                                        e.printStackTrace();
+//                                    }
 //                                    notificationLayout.setImageViewBitmap(R.id.notificationImageview,bitmap);
 //                                    notificationLayout.setImageViewResource(R.id.notificationImageview, Integer.parseInt(image));
                                     notificationLayout.setTextViewText(R.id.notificationProductCode, productcode);
                                     notificationLayout.setOnClickPendingIntent(R.id.notificationviewdetails,pendingIntent);
-
                                     notificationLayout.setTextViewText(R.id.notificationtitel, title);
-
                                     notificationLayout.setTextViewText(R.id.notificationProductPrice, price);
-
-
                                     Notification notification = new NotificationCompat.Builder(context, "n1")
                                     .setContentTitle("Your cart is waiting!")
 //                                    .setContentText("There is something in your cart. Would you like to complete your Purchase?")
@@ -115,6 +148,7 @@ public class NotificationBroadcaster extends BroadcastReceiver {
                                                          .setSmallIcon(R.drawable.ic_notifications_black_24dp)
                                            .setColor(Color.parseColor("#FF69B4"))
                                             .setPriority(NotificationCompat.PRIORITY_HIGH)
+                                            .setAutoCancel(true)
 
                                             .setContentIntent(pendingIntent)
 //                                    .setStyle(new NotificationCompat.BigTextStyle()
@@ -122,7 +156,9 @@ public class NotificationBroadcaster extends BroadcastReceiver {
 //                                            //.setBigContentTitle("Total Rs" + textView.getText().toString())
 //                                            .setSummaryText("Thanks For Visiting Jaquar!!!"))
 
-                                            .build();
+                                         .build();
+
+
                                     notificationManagerCompat.notify(4, notification);
 //                                databaseReference.getRef().limitToFirst(1).addValueEventListener(new ValueEventListener() {
 //                                    @Override

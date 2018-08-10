@@ -128,14 +128,13 @@ TextView tpriceValue;
                             int tpi1 = Integer.valueOf(totalItemprice1);//totalprice
                             int ppi1 = Integer.valueOf(priceperItem1);//price per item
                             int qu =Integer.valueOf(totalquantity);//total quantity
-
                             qu = qu - 1;
                             holder.price.setText(String.valueOf(tpi1-ppi1));
                             holder.countTextview.setText(String.valueOf(qu));
                             HashMap<String, Object> result = new HashMap<>();
                             result.put("quantity", String.valueOf(qu));
                             result.put("totalprice", String.valueOf(ppi1 * qu));
-                            FirebaseDatabase.getInstance().getReference("cartVlues").child(uid1).child(pcode1).updateChildren(result);
+                            FirebaseDatabase.getInstance().getReference("cartValues").child(uid1).child(pcode1).updateChildren(result);
                             FirebaseDatabase.getInstance().getReference("cartValues").child(uid1).child(pcode1).updateChildren(result);
 
                         }

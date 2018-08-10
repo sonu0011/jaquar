@@ -26,4 +26,10 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="ImageTitle">sty</style>
+
+    <style name="title">
+
+    </style>
+
 </resources>

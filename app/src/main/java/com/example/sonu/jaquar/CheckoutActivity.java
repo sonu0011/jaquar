@@ -232,7 +232,7 @@ ProgressDialog progressDialog;
                            SearchConstants.totalpriceValue = SearchConstants.totalpriceValue + Integer.valueOf(tprice);
                            Log.d("totalpricefirebase", String.valueOf(tprice));
                            Log.d("totalpriceAg", String.valueOf(SearchConstants.totalpriceValue));
-                           textView.setText(String.valueOf(SearchConstants.totalpriceValue)+".00");
+                           textView.setText(String.valueOf(SearchConstants.totalpriceValue));
                        }
 
                    }

@@ -507,7 +507,7 @@ if(singelProductModel.getWhishlist().equals("1"))
                 }
             }
         });
-            viewMore.setOnClickListener(new View.OnClickListener() {
+            itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     SingelProductModel singelProductModel = list.get(position);

@@ -79,7 +79,14 @@ CoordinatorLayout coordinatorLayout;
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         list =new ArrayList<>();
         toolbar =findViewById(R.id.productsToolbar);
-        toolbar.setTitle("Products");
+        Log.d("catname", "onCreate: "+categoryname);
+        if (categoryname == ""){
+            toolbar.setTitle("New Arrivals");
+        }
+
+        else {
+            toolbar.setTitle("Products");
+        }
         toolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
@@ -96,7 +103,6 @@ CoordinatorLayout coordinatorLayout;
             });
 
     }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.searchandlogout,menu);
@@ -156,11 +162,11 @@ CoordinatorLayout coordinatorLayout;
 //                Log.e("categotyNameDataSnap",categoryname);
 
                 list.clear();
-                if(categoryname==null)
+                if(categoryname == null || categoryname == "" )
                 {
+                    Log.d("catname", "onDataChange: null");
                     Log.d(TAG, "onDataChange: categorynamenull");
                     for (DataSnapshot ds : dataSnapshot.child("Accessories ").child("SubAccessories").child("Bath Accessories").getChildren()) {
-
                         String image =ds.child("image").getValue(String.class);
                         String price =ds.child("price").getValue(String.class);
                         String productcode =ds.child("productcode").getValue(String.class);
@@ -177,23 +183,26 @@ CoordinatorLayout coordinatorLayout;
                     }
                 }
                 else {
-                    for (DataSnapshot ds : dataSnapshot.child(categoryname + " ").child("SubAccessories").child(subcategory).getChildren()) {
+                    if (categoryname != ""){
+                        Toast.makeText(ProductsActivity.this, ""+categoryname, Toast.LENGTH_SHORT).show();
+                        Log.d("catname", "onDataChange: catname not null "+categoryname);
+                        for (DataSnapshot ds : dataSnapshot.child(categoryname + " ").child("SubAccessories").child(subcategory).getChildren()) {
+                            String image = ds.child("image").getValue(String.class);
+                            String price = ds.child("price").getValue(String.class);
+                            String productcode = ds.child("productcode").getValue(String.class);
+                            String title = ds.child("title").getValue(String.class);
+                            String whishlist = ds.child("whishlist").getValue(String.class);
 
-                        String image = ds.child("image").getValue(String.class);
-                        String price = ds.child("price").getValue(String.class);
-                        String productcode = ds.child("productcode").getValue(String.class);
-                        String title = ds.child("title").getValue(String.class);
-                        String whishlist    = ds.child("whishlist").getValue(String.class);
+                            if (image != null && price != null && productcode != null && title != null) {
 
-                        if (image != null && price != null && productcode != null && title != null) {
+                                Log.d("ppp", image + " " + price + " " + productcode + " " + title);
+                                singelProductModel = new SingelProductModel(image, price, productcode, title, whishlist);
+                                list.add(singelProductModel);
+                                Log.d("listSizeinside", String.valueOf(list.size()));
+                            }
 
-                            Log.d("ppp", image + " " + price + " " + productcode + " " + title);
-                            singelProductModel = new SingelProductModel(image, price, productcode, title,whishlist);
-                            list.add(singelProductModel);
-                            Log.d("listSizeinside", String.valueOf(list.size()));
                         }
-
-                    }
+                }
                 }
                     Log.d("arraylistSize", String.valueOf(list.size()));
                     sIngleProductAdapter =new SIngleProductAdapter(getApplicationContext(),list,categoryname,subcategory,coordinatorLayout);
@@ -217,6 +226,7 @@ CoordinatorLayout coordinatorLayout;
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        SearchConstants.CATEGOTY_NAME="";
         Log.d(TAG, "onDestroy: ");
         if (internetReceiver != null) {
             unregisterReceiver(internetReceiver);

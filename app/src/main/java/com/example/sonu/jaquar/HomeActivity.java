@@ -340,7 +340,6 @@ public class HomeActivity extends AppCompatActivity
                 Intent intent = new Intent(HomeActivity.this, ShowByCategoty.class);
                 startActivity(intent);
 //                overridePendingTransition(R.anim.right_in,R.anim.left_out);
-
             }
         });
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -348,12 +347,11 @@ public class HomeActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-
         navigationView = (NavigationView) findViewById(R.id.nav_view);
+//        navigationView.getMenu().getItem(0).setChecked(false);
+        onNavigationItemSelected(navigationView.getMenu().getItem(0));
         gallery = (TextView) MenuItemCompat.getActionView(navigationView.getMenu().
                 findItem(R.id.nav_profile));
-
-
         initializeCountDrawer();
         navigationView.setNavigationItemSelectedListener(this);
         NavigationMenuView navMenuView = (NavigationMenuView) navigationView.getChildAt(0);
@@ -395,10 +393,7 @@ public class HomeActivity extends AppCompatActivity
 
                     }
                 });
-
-
     }
-
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         Toast.makeText(this, "onTOuchEvent", Toast.LENGTH_SHORT).show();

@@ -44,7 +44,7 @@ public class RecyclerAdapter extends RecyclerView.ViewHolder {
       TextView textView = view.findViewById(R.id.firebasetext);
       ImageView imageView = view.findViewById(R.id.firebaseImage);
       textView.setText(title);
-        Glide.with(context).load(image).placeholder(R.drawable.loader).into(imageView);
+        Glide.with(context).load(image).into(imageView);
 
     }
     private NewlyProductAdapter.ClickListener mClickListener;

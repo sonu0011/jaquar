@@ -51,7 +51,7 @@ FavourateAdapter favourateAdapter;
         registerReceiver(internetReceiver, intentFilter);
         imageView =findViewById(R.id.nowhishlistimage);
         toolbar =findViewById(R.id.favtoolbar);
-        toolbar.setTitle("Favourites");
+        toolbar.setTitle("Your Wish List");
         toolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
