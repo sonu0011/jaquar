@@ -121,7 +121,7 @@
 
        style="@style/Widget.AppCompat.Button.Colored"
         android:padding="20dp"
-        android:text="Buy Now"
+        android:text="Add to WhishList"
         android:textStyle="bold"
         android:fontFamily="@font/custom_font"
         android:textColor="#fff" />

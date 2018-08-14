@@ -34,7 +34,6 @@
             android:layout_gravity="center_horizontal"/>
 
     </ViewFlipper>
-
     <RadioGroup
         android:orientation="horizontal"
         android:layout_marginTop="190dp"
@@ -43,14 +42,15 @@
         android:layout_height="wrap_content">
         <RadioButton
             android:id="@+id/rgb1"
-
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <RadioButton
             android:id="@+id/rgb2"
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <RadioButton
+
             android:id="@+id/rgb3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />

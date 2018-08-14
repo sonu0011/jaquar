@@ -31,6 +31,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.sonu.jaquar.Constants.CheckInternetCoonnection;
 import com.example.sonu.jaquar.Constants.SearchConstants;
+import com.example.sonu.jaquar.Models.SingelProductModel;
 import com.example.sonu.jaquar.Receivers.InternetReceiver;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -38,6 +39,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 public class BuyProduct extends AppCompatActivity {
@@ -52,7 +54,9 @@ FirebaseUser firebaseUser;
 FirebaseAuth firebaseAuth;
 int ProductCount =0;
 String uid;
+int checkstatus=0;
 SQLiteDatabase sqLiteDatabase;
+int whish =0;
 int checkProduct =0;
     String image,price,title,productcode;
     CoordinatorLayout coordinatorLayout;
@@ -91,6 +95,7 @@ int checkProduct =0;
             toolbar.setTitle("Add to Cart ");
             toolbar.setTitleTextColor(Color.WHITE);
             setSupportActionBar(toolbar);
+
             getSupportActionBar().setDisplayShowHomeEnabled(true);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             toolbar.setBackgroundColor(getResources().getColor(R.color.toobarCOlor));
@@ -106,23 +111,204 @@ int checkProduct =0;
             cartValue.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (SearchConstants.Productcount > 0) {
+//                    if (SearchConstants.Productcount > 0) {
                         startActivity(new Intent(BuyProduct.this, CheckoutActivity.class));
-                    } else {
-                        Toast.makeText(BuyProduct.this, "Cart is Empty!!!", Toast.LENGTH_SHORT).show();
 
-                    }
+
+
                 }
             });
             buynow.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (SearchConstants.Productcount > 0) {
-                        startActivity(new Intent(BuyProduct.this, CheckoutActivity.class));
-                    } else {
-                        Toast.makeText(BuyProduct.this, "Cart is Empty!!!", Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, "onClick: ");
+                    FirebaseDatabase fd =FirebaseDatabase.getInstance();
+                     DatabaseReference db =fd.getReference("categoreis");
+                     final DatabaseReference dbref =fd.getReference();
+                    Query query =db.limitToFirst(4);
+                    query.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            for (DataSnapshot data:dataSnapshot.getChildren())
+                            {
+                                for (DataSnapshot data1:data.getChildren())
+                                {
+                                   for (DataSnapshot data2:data1.getChildren())
+                                   {
+                                      data2.getRef().limitToFirst(4)
+                                              .addListenerForSingleValueEvent(new ValueEventListener() {
+                                                  @Override
+                                                  public void onDataChange(DataSnapshot dataSnapshot) {
+                                                      for (DataSnapshot dataSnapshot1:dataSnapshot.getChildren()){
+                                                          String code =dataSnapshot1.child("productcode").getValue(String.class);
+                                                          String whishlist =dataSnapshot1.child("whishlist").getValue(String.class);
+                                                          if (productcode.equals(code))
+                                                          {
+                                                              Log.d(TAG, "onDataChange:first four matches");
+                                                              Log.d(TAG, "onDataChange: whishlist value "+whishlist);
+                                                              checkstatus=1;
+                                                              if (Integer.valueOf(whishlist) == 0)
+                                                              {
 
+                                                                  DatabaseReference databaseReference1 = dbref.child("favourites").child((FirebaseAuth.getInstance().getCurrentUser().getUid())).child(productcode);
+                                                                  databaseReference1.child("title").setValue(title);
+                                                                  databaseReference1.child("image").setValue(image);
+                                                                  databaseReference1.child("price").setValue(price);
+                                                                  databaseReference1.child("productcode").setValue(productcode);
+                                                                  dataSnapshot1.getRef().child("whishlist").setValue("1");
+                                                                  Snackbar.make(coordinatorLayout,"Added to Whishlist",Snackbar.LENGTH_SHORT).show();
+
+
+                                                              }
+                                                              else{
+                                                                  Snackbar.make(coordinatorLayout,"Product is already in whishlist",Snackbar.LENGTH_SHORT).show();
+                                                              }
+
+
+                                                          }
+                                                      }
+                                                  }
+
+                                                  @Override
+                                                  public void onCancelled(DatabaseError databaseError) {
+
+                                                  }
+                                              });
+                                   }
+                                }
+                            }
+
+
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+                    Log.d(TAG, "onDataChange:value of checkstatus"+checkstatus);
+                    if (checkstatus == 0)
+                    {
+                       Query query1 =db.limitToLast(2);
+                       query1.addListenerForSingleValueEvent(new ValueEventListener() {
+                           @Override
+                           public void onDataChange(DataSnapshot dataSnapshot) {
+                            for (DataSnapshot data:dataSnapshot.getChildren())
+                            {
+                                for (DataSnapshot dat:data.getChildren()){
+                                    String pcode  =dat.child("productcode").getValue(String.class);
+                                    String whishlist =dat.child("whishlist").getValue(String.class);
+
+                                    if (productcode.equals(pcode))
+                                    {
+                                        Log.d(TAG, "onDataChange: lsttwo mathces");
+                                        Log.d(TAG, "onDataChange: whishlist value "+whishlist);
+
+                                        if (Integer.valueOf(whishlist) == 0)
+                                        {
+                                            DatabaseReference databaseReference1 = dbref.child("favourites").child((FirebaseAuth.getInstance().getCurrentUser().getUid())).child(productcode);
+                                            databaseReference1.child("title").setValue(title);
+                                            databaseReference1.child("image").setValue(image);
+                                            databaseReference1.child("price").setValue(price);
+                                            databaseReference1.child("productcode").setValue(productcode);
+                                            dat.getRef().child("whishlist").setValue("1");
+                                            Snackbar.make(coordinatorLayout,"Added to Whishlist",Snackbar.LENGTH_SHORT).show();
+
+                                        }
+                                        else {
+                                            Snackbar.make(coordinatorLayout,"Product is already in whishlist",Snackbar.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                }
+
+                            }
+                           }
+
+                           @Override
+                           public void onCancelled(DatabaseError databaseError) {
+
+                           }
+                       });
                     }
+
+//
+//                    Log.d(TAG, "onClick: ");
+//                        fd = FirebaseDatabase.getInstance();
+//                        db = fd.getReference("categoreis");
+//                        db.addListenerForSingleValueEvent(new ValueEventListener() {
+//                            @Override
+//                            public void onDataChange(DataSnapshot dataSnapshot) {
+//                                for (DataSnapshot ds : dataSnapshot.child("Accessories ").child("SubAccessories").child("Accessories (For Disable-friendly Bathroom)").getChildren()) {
+//                                    {        String pcode = ds.child("productcode").getValue(String.class);
+//                                        String fav = ds.child("whishlist").getValue(String.class);
+//                                        if (pcode != null) {
+//                                            if (pcode.equals(productcodev)) {
+//                                                if (fav != null) {
+//                                                    if (fav.equals("0")) {
+//                                                        i = 1;
+//                                                        Log.d("fav", "yes");
+//                                                        firebaseDatabase = FirebaseDatabase.getInstance();
+//                                                        databaseReference = firebaseDatabase.getReference();
+//                                                        DatabaseReference databaseReference1 = databaseReference.child("favourites").child((FirebaseAuth.getInstance().getCurrentUser().getUid())).child(productcodev);
+//                                                        databaseReference1.child("title").setValue(title);
+//                                                        databaseReference1.child("image").setValue(image);
+//                                                        databaseReference1.child("price").setValue(price);
+//                                                        databaseReference1.child("productcode").setValue(productcodev);
+//                                                        int color = Color.parseColor("#FF0000");
+//                                                        wishlistimage.setColorFilter(color);
+//                                                        ds.getRef().child("whishlist").setValue("1");
+//                                                        Snackbar.make(coordinatorLayout,"Added to Whishlist",Snackbar.LENGTH_SHORT).show();
+//
+//                                                    }
+//
+//
+//                                                    if (fav.equals("1")) {
+//                                                        int color = Color.parseColor("#39000000");
+//                                                        wishlistimage.setColorFilter(color);
+//                                                        ds.getRef().child("whishlist").setValue("0");
+//                                                        FirebaseDatabase.getInstance().getReference("favourites").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+//                                                                .addListenerForSingleValueEvent(new ValueEventListener() {
+//                                                                    @Override
+//                                                                    public void onDataChange(DataSnapshot dataSnapshot) {
+//                                                                        for (DataSnapshot val : dataSnapshot.getChildren()) {
+//                                                                            String code = val.child("productcode").getValue(String.class);
+//                                                                            if (code.equals(productcodev)) {
+//                                                                                val.getRef().removeValue();
+//                                                                            }
+//                                                                        }
+//                                                                    }
+//
+//                                                                    @Override
+//                                                                    public void onCancelled(DatabaseError databaseError) {
+//
+//                                                                    }
+//                                                                });
+//                                                    }
+//                                                }
+//
+//                                            }
+//                                        }
+//
+//                                    }
+//
+//                                }
+//                            }
+//
+//
+//                            @Override
+//                            public void onCancelled(DatabaseError databaseError) {
+//
+//                            }
+//                        });
+//
+
+//                    if (SearchConstants.Productcount > 0) {
+//                        startActivity(new Intent(BuyProduct.this, CheckoutActivity.class));
+//                    } else {
+//                        Toast.makeText(BuyProduct.this, "Cart is Empty!!!", Toast.LENGTH_SHORT).show();
+//
+//                    }
 
                 }
             });
@@ -140,7 +326,6 @@ int checkProduct =0;
         Log.d("!!!!","Add to cart");
         Log.d("New Item ","COUNT"+String.valueOf(SearchConstants.Productcount));
         DatabaseReference ref  =FirebaseDatabase.getInstance().getReference("cartValues").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-
         DatabaseReference child_db =ref.child(productcode);
         child_db.child("image").setValue(image);
         child_db.child("title").setValue(title);

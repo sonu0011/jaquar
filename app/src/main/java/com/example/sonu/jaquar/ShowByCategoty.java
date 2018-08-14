@@ -1,9 +1,12 @@
+
 package com.example.sonu.jaquar;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.provider.SyncStateContract;
 import android.support.v4.view.MenuItemCompat;
@@ -50,7 +53,7 @@ public class ShowByCategoty extends AppCompatActivity  {
     RecyclerView recyclerView;
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
-  ProgressDialog progressDialog;
+    ProgressDialog progressDialog;
     Toolbar toolbar;
     private AlertDialog.Builder mbuilder;
     private InternetReceiver internetReceiver;
@@ -83,10 +86,11 @@ public class ShowByCategoty extends AppCompatActivity  {
             @Override
             public void onClick(View view) {
                 onBackPressed();
-
             }
         });
-
+        Drawable backArrow = getResources().getDrawable(R.drawable.ic_arrow_back_black_24dp);
+        backArrow.setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
+        getSupportActionBar().setHomeAsUpIndicator(backArrow);
     }
 
     @Override
@@ -120,7 +124,7 @@ public class ShowByCategoty extends AppCompatActivity  {
                             @Override
                             public void onItemClick(View view, int position) {
                                 TextView textView = view.findViewById(R.id.firebasetext);
-                               String s  =textView.getText().toString();
+                                String s  =textView.getText().toString();
                                 SearchConstants.CATEGOTY_NAME=s;
                                 Intent intent  =new Intent(ShowByCategoty.this,SubCategory.class);
                                 intent.putExtra("title",s);

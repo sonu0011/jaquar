@@ -32,6 +32,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -56,8 +57,10 @@ import com.google.firebase.database.ValueEventListener;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 public class CheckoutActivity extends AppCompatActivity{
 RecyclerView                      recyclerView;
@@ -78,14 +81,33 @@ NotificationManager               notificationManager;
 NotificationChannel               notificationChannel;
 Handler handler;
 Runnable runnable;
+ImageView emptyimage;
+    String currentDateandTime;
+    int r;
+    String strDate;
 ProgressDialog progressDialog;
     private AlertDialog.Builder mbuilder;
     private BroadcastReceiver internetReceiver;
+    public static final String TAG ="CheckoutActivity";
+    TextView totalpricetext,totalpricesymbol;
+    LinearLayout linearLayout;
+    Button continueshopping;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        continueshopping =findViewById(R.id.continueshopping);
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date();
+        strDate = dateFormat.format(date).toString();
         setContentView(R.layout.activity_checkout);
+        linearLayout =findViewById(R.id.checkoutlinear);
+        totalpricetext =findViewById(R.id.totalPrice);
+        totalpricesymbol =findViewById(R.id.totalPriceSymbol);
+        emptyimage =findViewById(R.id.emptycartimage);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        currentDateandTime= sdf.format(new Date());
+        Log.d(TAG, "onCreate: "+currentDateandTime);
         IntentFilter intentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
         internetReceiver = new InternetReceiver();
         registerReceiver(internetReceiver, intentFilter);
@@ -126,27 +148,37 @@ ProgressDialog progressDialog;
             @Override
             public void onClick(View view) {
                 int a = Integer.valueOf(textView.getText().toString());
+                Log.d(TAG, "onClick: value of total price"+a);
+                int childcount = recyclerView.getChildCount();
+                Log.d(TAG, "onClick: childcount"+childcount);
                 if (a>0) {
                 FirebaseDatabase fd=FirebaseDatabase.getInstance();
                 DatabaseReference db  =fd.getReference();
-                final DatabaseReference db1 =db.child("orderHistory").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).push();
-
+                DatabaseReference orderdetails =db.child("OrderDetails").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(currentDateandTime);
+                orderdetails.child("order_id").setValue(currentDateandTime);
+                orderdetails.child("totalitems").setValue(String.valueOf(childcount));
+                orderdetails.child("order_date").setValue(strDate);
+                orderdetails.child("totalprice").setValue(String.valueOf(a));
+                final DatabaseReference db1 =db.child("orderHistory").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(currentDateandTime);
                 databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         for (DataSnapshot ds:dataSnapshot.getChildren()) {
                             String pcode =ds.child("productcode").getValue(String.class);
 
-                            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                            Date date = new Date();
-                            String strDate = dateFormat.format(date).toString();
                             FirebaseDatabase val = FirebaseDatabase.getInstance();
                             DatabaseReference ref = val.getReference();
-                            DatabaseReference data = ref.child("OrdersDate").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).push()
+//                            Random random =new Random();
+//                             r = 10000000 + random.nextInt(90000000);
+////                             r =random.nextInt(10000000);
+                            DatabaseReference data = ref.child("OrdersDate").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(String.valueOf(currentDateandTime))
                                     .child(pcode);
                             data.child("time").setValue(strDate);
                             data.child("productcode").setValue(pcode);
                         }
+
+//                        Date currentTime = Calendar.getInstance().getTime();
+//                        Log.d(TAG, "onDataChange: random "+r+" ");
                                        db1.setValue(dataSnapshot.getValue()).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
@@ -328,28 +360,54 @@ ProgressDialog progressDialog;
     }
     @Override
     protected void onStart() {
-        Log.d("whichMethod","onstart");
-        Log.d("SearchConstantValueonSt", String.valueOf(SearchConstants.totalpriceValue));
-        super.onStart();
-        Log.d("totalPriceonstart", String.valueOf(totalprice));
+                Log.d("whichMethod","onstart");
+                Log.d("SearchConstantValueonSt", String.valueOf(SearchConstants.totalpriceValue));
+                super.onStart();
+                Log.d("totalPriceonstart", String.valueOf(totalprice));
 
-        Log.d(tag,"onStart");
-      progressDialog.setTitle("Loading...");
-      progressDialog.setMessage("Please Wait..");
-      progressDialog.setCanceledOnTouchOutside(false);
-      progressDialog.show();
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                Log.d(tag,"onStart");
+                  progressDialog.setTitle("Loading...");
+                  progressDialog.setMessage("Please Wait..");
+                  progressDialog.setCanceledOnTouchOutside(false);
+                  progressDialog.show();
+        databaseReference.addValueEventListener(new ValueEventListener() {
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                checkOutMOdelList.clear();
-                Log.d("threadidDataChange", String.valueOf(Thread.currentThread().getId()));
-                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
-                    Log.d(tag, "for loop");
-                    CheckOutMOdel checkOutMOdel = dataSnapshot1.getValue(CheckOutMOdel.class);
-                    checkOutMOdelList.add(checkOutMOdel);
-                    checkOutAdapter =new CheckOutAdapter(CheckoutActivity.this,checkOutMOdelList);
-                    recyclerView.setAdapter(checkOutAdapter);
+
+                if (!dataSnapshot.exists()){
+                    Log.d(TAG, "onDataChange: data does not exist");
+                    emptyimage.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.GONE);
+                    textView.setVisibility(View.GONE);
+                    button.setVisibility(View.GONE);
+                    toolbar.setTitle("Continue Shopping..");
+                    totalpricetext.setVisibility(View.GONE);
+                    totalpricesymbol.setVisibility(View.GONE);
+                    linearLayout.setBackgroundColor(Color.WHITE);
+                    continueshopping = findViewById(R.id.continueshopping);
+                    continueshopping.setVisibility(View.VISIBLE);
+                    continueshopping.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            startActivity(new Intent(CheckoutActivity.this,HomeActivity.class));
+                            finish();
+                        }
+                    });
+
+                }
+                if (dataSnapshot.exists()) {
+                    emptyimage.setVisibility(View.GONE);
+                    checkOutMOdelList.clear();
+                    Log.d("threadidDataChange", String.valueOf(Thread.currentThread().getId()));
+                    for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+
+                        Log.d(tag, "for loop");
+                        CheckOutMOdel checkOutMOdel = dataSnapshot1.getValue(CheckOutMOdel.class);
+                        checkOutMOdelList.add(checkOutMOdel);
+                        checkOutAdapter = new CheckOutAdapter(CheckoutActivity.this, checkOutMOdelList);
+                        recyclerView.setAdapter(checkOutAdapter);
+                    }
                 }
                 progressDialog.dismiss();
             }

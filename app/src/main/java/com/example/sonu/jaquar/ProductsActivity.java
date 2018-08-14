@@ -178,13 +178,14 @@ CoordinatorLayout coordinatorLayout;
                             singelProductModel =new SingelProductModel(image,price,productcode,title,whishlist);
                             list.add(singelProductModel);
                             Log.d("listSizeinside", String.valueOf(list.size()));
+                            sIngleProductAdapter =new SIngleProductAdapter(getApplicationContext(),list,"anothercat",coordinatorLayout);
+                            recyclerView.setAdapter(sIngleProductAdapter);
 
                         }
                     }
                 }
                 else {
                     if (categoryname != ""){
-                        Toast.makeText(ProductsActivity.this, ""+categoryname, Toast.LENGTH_SHORT).show();
                         Log.d("catname", "onDataChange: catname not null "+categoryname);
                         for (DataSnapshot ds : dataSnapshot.child(categoryname + " ").child("SubAccessories").child(subcategory).getChildren()) {
                             String image = ds.child("image").getValue(String.class);
@@ -199,14 +200,15 @@ CoordinatorLayout coordinatorLayout;
                                 singelProductModel = new SingelProductModel(image, price, productcode, title, whishlist);
                                 list.add(singelProductModel);
                                 Log.d("listSizeinside", String.valueOf(list.size()));
+                                sIngleProductAdapter =new SIngleProductAdapter(getApplicationContext(),list,categoryname,subcategory,coordinatorLayout);
+                                recyclerView.setAdapter(sIngleProductAdapter);
                             }
 
                         }
                 }
                 }
                     Log.d("arraylistSize", String.valueOf(list.size()));
-                    sIngleProductAdapter =new SIngleProductAdapter(getApplicationContext(),list,categoryname,subcategory,coordinatorLayout);
-                    recyclerView.setAdapter(sIngleProductAdapter);
+
                 }
             @Override
             public void onCancelled(DatabaseError databaseError) {

@@ -15,6 +15,9 @@
         <item name="DialogSpotCount">4</item>
         <item name="android:colorControlHighlight" tools:targetApi="lollipop">#ffff8800</item>
     </style>
+    <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:fontFamily">@font/custom_font_dark</item>
+    </style>
     <style name="Dialog" parent="Theme.AppCompat.Dialog">
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsFloating">true</item>

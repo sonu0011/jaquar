@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:id="@+id/homeserchlayout"
     android:layout_height="match_parent"
-    tools:context="com.example.sonu.jaquar.HomeSearch">
+    android:id="@+id/ordersearchrelativelayout"
+    tools:context="com.example.sonu.jaquar.SearchOrders">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
@@ -14,47 +14,26 @@
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.v7.widget.Toolbar
-            android:theme="@style/ToolbarTheme"
-            android:id="@+id/toolbarHomeSearch"
+            android:id="@+id/ordersSearchToolbar"
             android:layout_width="match_parent"
-         android:layout_height="wrap_content"
+            android:layout_height="wrap_content"
             />
 
     </android.support.design.widget.AppBarLayout>
-
-
     <EditText
-        android:maxLength="20"
-        android:fontFamily="@font/custom_font_dark"
         android:layout_below="@+id/appbar"
-        android:id="@+id/searchfromfirebase"
+        android:id="@+id/ordersearchEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:hint="  Search..."
         android:padding="5dp"
+        android:layout_marginRight="10dp"
         android:inputType="text"
-
+        android:textColor="#000"
+        android:maxLength="25"
         android:layout_marginLeft="15dp"
         android:background="@drawable/searchbag"
-        android:layout_marginRight="15dp"
-      />
-
-    <ImageView
-        android:id="@+id/homesearch_btn"
-        android:layout_width="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/searchfromfirebase"
-        android:layout_alignRight="@+id/searchfromfirebase"
-        android:layout_alignTop="@+id/searchfromfirebase"
-        android:src="@drawable/ic_search_black_24dp" />
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/searchRecycleview"
-        android:layout_marginTop="8dp"
-        android:layout_below="@+id/searchfromfirebase"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
         />
     <ImageView
         android:visibility="invisible"
@@ -64,10 +43,20 @@
         android:src="@drawable/noresultfound"
         android:layout_centerInParent="true"/>
 
-    <android.support.design.widget.CoordinatorLayout
-        android:layout_width="match_parent"
+    <ImageView
+        android:id="@+id/orderSearchIMageview"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:id="@+id/searchCoridnate"
-        android:layout_alignParentBottom="true"/>
+        android:layout_above="@+id/OrdersearchRecycleview"
+        android:layout_alignEnd="@+id/ordersearchEditText"
+        android:layout_alignRight="@+id/ordersearchEditText"
+        android:src="@drawable/ic_search_black_24dp" />
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/OrdersearchRecycleview"
+        android:layout_marginTop="8dp"
+        android:layout_below="@+id/ordersearchEditText"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        />
 </RelativeLayout>

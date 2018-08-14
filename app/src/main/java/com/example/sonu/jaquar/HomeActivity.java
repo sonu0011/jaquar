@@ -320,12 +320,12 @@ public class HomeActivity extends AppCompatActivity
         cartValue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (SearchConstants.Productcount > 0) {
+//                if (SearchConstants.Productcount > 0) {
                     startActivity(new Intent(HomeActivity.this, CheckoutActivity.class));
-                } else {
-                    Toast.makeText(HomeActivity.this, "Cart is Empty!!!", Toast.LENGTH_SHORT).show();
-
-                }
+//                } else {
+//                    Toast.makeText(HomeActivity.this, "Cart is Empty!!!", Toast.LENGTH_SHORT).show();
+//
+//                }
 
             }
         });
@@ -365,6 +365,8 @@ public class HomeActivity extends AppCompatActivity
         roundedBitmapDrawable.setCircular(true);
         ProfileImage.setText(userEmail);
         imageView.setImageDrawable(roundedBitmapDrawable);
+        toggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.white));
+
 
     }
 
@@ -528,6 +530,14 @@ public class HomeActivity extends AppCompatActivity
         }
         if (id == R.id.nav_logout) {
 
+            AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this,R.style.Dialog);
+            builder
+                    .setIcon(getResources().getDrawable(R.drawable.logout))
+                    .setTitle("Log out").setMessage("Are you sure you want to Log out?")
+                    .setCancelable(false)
+
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
                             FirebaseAuth.getInstance().signOut();
 
                             Intent i = new Intent(HomeActivity.this, LoginActivity.class);
@@ -535,6 +545,15 @@ public class HomeActivity extends AppCompatActivity
                             startActivity(i);
                             finish();
 
+                        }
+                    })
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+            AlertDialog alert = builder.create();
+            alert.show();
         }
         if (id == R.id.nav_share) {
             Intent intent = new Intent(Intent.ACTION_SEND);

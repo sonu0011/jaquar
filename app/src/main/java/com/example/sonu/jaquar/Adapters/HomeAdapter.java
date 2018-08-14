@@ -138,6 +138,7 @@ Context context;
             ((SliderViewHolder) holder).img.setImageResource(R.drawable.image2);
             ((SliderViewHolder) holder).img1.setImageResource(R.drawable.image3);
             ((SliderViewHolder) holder).imag2.setImageResource(R.drawable.image1);
+
             int i =((SliderViewHolder) holder).viewFlipper.getDisplayedChild();
             if (i==0){
                 Log.d(TAG, "onBindViewHolder: "+i);

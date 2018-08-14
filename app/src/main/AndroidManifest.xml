@@ -33,16 +33,7 @@
             </intent-filter>
         </activity>
 
-        <receiver
-            android:name=".Receivers.InternetReceiver"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action
-                    android:name="android.net.conn.CONNECTIVITY_CHANGE"
-                    tools:ignore="BatteryLife" />
-            </intent-filter>
-        </receiver>
+
 
         <activity
             android:name=".HomeActivity"
@@ -93,8 +84,16 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".OrdersHistory"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".Adapters.ShowOrdersDetails"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".SearchOrders"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:screenOrientation="portrait" />
-        <activity android:name=".Adapters.ViewFlipperSampleActivity"></activity>
     </application>
 
 </manifest>

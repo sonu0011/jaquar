@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.sonu.jaquar.BuyProduct;
 import com.example.sonu.jaquar.Constants.AnimUtill;
+import com.example.sonu.jaquar.HomeSearch;
 import com.example.sonu.jaquar.Interfaces.MyRecyclerClickListner;
 import com.example.sonu.jaquar.Models.SingelProductModel;
 import com.example.sonu.jaquar.R;
@@ -33,6 +34,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
@@ -48,11 +50,21 @@ public class SIngleProductAdapter extends RecyclerView.Adapter<SIngleProductAdap
     int i=0;
     Context context;
     List<SingelProductModel> list;
+    List<SingelProductModel> list1;
        ProgressBar progressBar;
         String categoryname;
         String subcategory;
         String anothercat;
+    SingelProductModel singelProductModel;
         CoordinatorLayout coordinatorLayout;
+        String search;
+
+    public SIngleProductAdapter(Context context, List<SingelProductModel> list, CoordinatorLayout coordinatorLayout, String search) {
+        this.context = context;
+        this.list = list;
+        this.coordinatorLayout = coordinatorLayout;
+        this.search = search;
+    }
 
     public SIngleProductAdapter(Context context, List<SingelProductModel> list, String categoryname, String subcategory, CoordinatorLayout coordinatorLayout) {
         this.context = context;
@@ -60,15 +72,15 @@ public class SIngleProductAdapter extends RecyclerView.Adapter<SIngleProductAdap
         this.categoryname = categoryname;
         this.subcategory = subcategory;
         this.coordinatorLayout = coordinatorLayout;
-        Log.d(TAG, "SIngleProductAdapter: "+categoryname);
-        Log.d(TAG, "SIngleProductAdapter: "+subcategory);
+        Log.d(TAG, "SIngleProductAdaptercatname: "+categoryname);
+        Log.d(TAG, "SIngleProductAdaptersubcatname: "+subcategory);
     }
 
     public SIngleProductAdapter(Context context, List<SingelProductModel> list, String anothercat,CoordinatorLayout cl) {
         this.context = context;
         this.list = list;
         this.anothercat = anothercat;
-        Log.d("####an",anothercat+"sonu");
+        Log.d(TAG, "SIngleProductAdapter:another "+anothercat);
         this.coordinatorLayout =cl;
     }
 
@@ -77,9 +89,8 @@ public class SIngleProductAdapter extends RecyclerView.Adapter<SIngleProductAdap
         this.list = list;
         this.categoryname = categoryname;
         this.subcategory = subcategory;
-        Log.d("####cat",categoryname+"sonu");
-        Log.d("####sub",subcategory);
-
+        Log.d(TAG, "SIngleProductAdapter:categotyname "+categoryname);
+        Log.d(TAG, "SIngleProductAdapter: subcat"+subcategory);
 
     }
 
@@ -97,7 +108,8 @@ public class SIngleProductAdapter extends RecyclerView.Adapter<SIngleProductAdap
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        final SingelProductModel singelProductModel = list.get(position);
+           singelProductModel = list.get(position);
+
         Glide.with(context).load(singelProductModel.getImage()).placeholder(R.drawable.loader).into(holder.image);
          holder.price.setText(singelProductModel.getPrice()+".00");
         holder.title.setText(singelProductModel.getTitle());
@@ -135,7 +147,8 @@ if(singelProductModel.getWhishlist().equals("1"))
 
     @Override
     public int getItemCount() {
-        return list.size();
+
+       return list.size();
 
     }
 
@@ -175,21 +188,85 @@ if(singelProductModel.getWhishlist().equals("1"))
                 final String price = singelProductModel.getPrice();
                 final String productcodev = singelProductModel.getProductcode();
                 String whishlist = singelProductModel.getWhishlist();
-                if (categoryname == null && anothercat ==null) {
+//                if (search !=null) {
+//                    if (search.equals("HomeSearch")) {
+//                        SingelProductModel mod = list.get(position);
+//                        String s_pcode = mod.getProductcode();
+//                        Log.d(TAG, "onClick: homesearch");
+//                        Log.d(TAG, "onClick: " + s_pcode);
+//
+////                if (search.equals("HomeSearch")){
+////
+//
+//                        DatabaseReference db = FirebaseDatabase.getInstance().getReference("categoreis");
+//                        Query query = db.limitToFirst(4);
+//
+//                        query.addListenerForSingleValueEvent(new ValueEventListener() {
+//                            @Override
+//                            public void onDataChange(DataSnapshot dataSnapshot) {
+//                                list.clear();
+//                                for (final DataSnapshot data : dataSnapshot.getChildren()) {
+//                                    for (DataSnapshot data1 : data.getChildren()) {
+//                                        for (DataSnapshot data2 : data1.getChildren()) {
+//                                            data2.getRef().limitToFirst(4).addListenerForSingleValueEvent(new ValueEventListener() {
+//                                                @Override
+//                                                public void onDataChange(DataSnapshot dataSnapshot) {
+//
+//                                                    for (DataSnapshot data : dataSnapshot.getChildren()) {
+//
+//
+////
+//                                                    }
+////
+//                                                }
+//
+//
+//                                                @Override
+//                                                public void onCancelled(DatabaseError databaseError) {
+//
+//                                                }
+//                                            });
+////
+//                                        }
+//
+//                                    }
+//                                }
+//
+//
+//                            }
+//
+//                            @Override
+//                            public void onCancelled(DatabaseError databaseError) {
+//
+//                            }
+//                        });
+//
+////
+////                }
+//                    }
+
+
+                if (anothercat != null) {
+                    if (anothercat.equals("anothercat")) {
+                        Log.d(TAG, "onClick: anothercat");
+
                     fd = FirebaseDatabase.getInstance();
                     db = fd.getReference("categoreis");
                     db.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-                            for (DataSnapshot ds : dataSnapshot.child("Accessories ").child("SubAccessories").child("Accessories (For Disable-friendly Bathroom)").getChildren()) {
-                                {        String pcode = ds.child("productcode").getValue(String.class);
+                            for (DataSnapshot ds : dataSnapshot.child("Accessories ").child("SubAccessories").child("Bath Accessories").getChildren()) {
+                                {
+                                    Log.d(TAG, "onDataChange: "+ds);
+                                    String pcode = ds.child("productcode").getValue(String.class);
+                                    Log.d(TAG, "onDataChange: "+pcode);
                                     String fav = ds.child("whishlist").getValue(String.class);
                                     if (pcode != null) {
                                         if (pcode.equals(productcodev)) {
+                                            Log.d(TAG, "onDataChange: code matches");
                                             if (fav != null) {
                                                 if (fav.equals("0")) {
-                                                    i = 1;
-                                                    Log.d("fav", "yes");
+                                                    Log.d(TAG, "yes");
                                                     firebaseDatabase = FirebaseDatabase.getInstance();
                                                     databaseReference = firebaseDatabase.getReference();
                                                     DatabaseReference databaseReference1 = databaseReference.child("favourites").child((FirebaseAuth.getInstance().getCurrentUser().getUid())).child(productcodev);
@@ -200,7 +277,7 @@ if(singelProductModel.getWhishlist().equals("1"))
                                                     int color = Color.parseColor("#FF0000");
                                                     wishlistimage.setColorFilter(color);
                                                     ds.getRef().child("whishlist").setValue("1");
-                                                    Snackbar.make(coordinatorLayout,"Added to Whishlist",Snackbar.LENGTH_SHORT).show();
+                                                    Snackbar.make(coordinatorLayout, "Added to Whishlist", Snackbar.LENGTH_SHORT).show();
 
                                                 }
 
@@ -245,6 +322,7 @@ if(singelProductModel.getWhishlist().equals("1"))
                     });
 
                 }
+            }
 
 //                    Log.d(TAG, "onClick: newArrivals");
 //                    fd = FirebaseDatabase.getInstance();

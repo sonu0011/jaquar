@@ -2,8 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:id="@+id/search_bar_activity"
-        android:icon="@drawable/ic_search_black_24dp"
+        android:icon="@drawable/searchicon"
         android:title="Cart"
-        app:showAsAction="ifRoom"
+        app:showAsAction="always"
         app:actionViewClass="android.support.v7.widget.searchView" />
 </menu>

@@ -21,7 +21,9 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.sonu.jaquar.Adapters.SIngleProductAdapter;
@@ -127,6 +129,10 @@ ProgressDialog progressDialog;
         getMenuInflater().inflate(R.menu.searchandlogout,menu);
         MenuItem menuItem =menu.findItem(R.id.BothSearch);
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(menuItem);
+//        TextView searchText = (TextView) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+//        searchText.setTextColor(Color.WHITE);
+
+
         //searchView.setInputType(InputType.TYPE_CLASS_TEXT |InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

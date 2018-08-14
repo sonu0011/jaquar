@@ -64,7 +64,10 @@ public class NotificationBroadcaster extends BroadcastReceiver {
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
         firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference("cartValues").child(firebaseUser.getUid());
+        if (databaseReference !=null){
+            databaseReference = firebaseDatabase.getReference("cartValues").child(firebaseUser.getUid());
+
+        }
         notificationManagerCompat = NotificationManagerCompat.from(context);
         notificationManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -80,6 +83,8 @@ public class NotificationBroadcaster extends BroadcastReceiver {
             final NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
             if ((networkInfo != null) && (networkInfo.isConnected())) {
                 if (firebaseUser != null) {
+                    databaseReference = firebaseDatabase.getReference("cartValues").child(firebaseUser.getUid());
+
                     Query query = databaseReference.orderByKey().limitToFirst(1);
 
                     Log.e("FirebaseUserNull", "no");
